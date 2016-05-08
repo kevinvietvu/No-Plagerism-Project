@@ -1,18 +1,24 @@
 import java.awt.*;
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 
 public class ControlPanel extends JPanel {
 	
 	public ControlPanel()
 	{
 		super();
-		this.add(new JLabel("Add"));
 		this.addButtons();
 	}
 	
 	public void addButtons()
 	{
+		JPanel shapes = new JPanel();
+		JPanel color = new JPanel();
+		JPanel move = new JPanel();
+		JTextArea box = new JTextArea();
+		box.setBorder(new LineBorder(Color.gray, 2));
+		box.setEditable(false);
 		
 		JButton rect = new JButton("Rect");
 		JButton oval = new JButton("Oval");
@@ -23,13 +29,21 @@ public class ControlPanel extends JPanel {
 		JButton moveBack = new JButton("Move To Back");
 		JButton remove = new JButton("Remove Shape");
 		
-		this.add(rect);
-		this.add(oval);
-		this.add(line);
-		this.add(text);
-		this.add(setColor);
-		this.add(moveFront);
-		this.add(moveBack);
-		this.add(remove);
+		shapes.add(new JLabel("Add"));
+		shapes.add(rect);
+		shapes.add(oval);
+		shapes.add(line);
+		shapes.add(text);
+		
+		color.add(setColor);
+		
+		move.add(moveFront);
+		move.add(moveBack);
+		move.add(remove);
+		
+		this.add(shapes);
+		this.add(color);
+		this.add(move);
+		this.add(box);
 	}
 }
