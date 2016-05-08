@@ -16,6 +16,7 @@ public class Whiteboard extends JFrame {
 		title = "Whiteboard";
 	}
 	
+	
 	public void run()
 	{
 	    frame = new JFrame(title);
@@ -27,7 +28,6 @@ public class Whiteboard extends JFrame {
 	    
 	    ControlPanel controls = new ControlPanel();
 	    controls.setLayout(new BoxLayout(controls, BoxLayout.Y_AXIS));
-	    
 	    
 	    frame.add(controls,BorderLayout.WEST);
 
