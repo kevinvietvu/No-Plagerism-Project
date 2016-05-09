@@ -51,6 +51,12 @@ public class ControlPanel extends JPanel {
 		JButton line = new JButton("Line");
 		JButton text = new JButton("Text");
 		JButton setColor = new JButton("Set Color");
+		setColor.addActionListener(new ActionListener() { 
+		public void actionPerformed(ActionEvent e) {
+			Color initialcolor = Color.BLACK;
+			Color color = JColorChooser.showDialog(setColor, "Select a color", initialcolor);
+			}
+		} );
 		JButton moveFront = new JButton("Move To Front");
 		JButton moveBack = new JButton("Move To Back");
 		JButton remove = new JButton("Remove Shape");

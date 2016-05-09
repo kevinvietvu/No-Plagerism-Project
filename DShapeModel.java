@@ -1,11 +1,13 @@
 import java.awt.*;
+import java.util.ArrayList;
 
-public class DShapeModel {
+public class DShapeModel implements ModelListener {
 	public int x;
 	public int y;
 	public int width;
 	public int height;
 	public Color c;
+	public ArrayList<ModelListener> listeners;
 	
 	DShapeModel()
 	{
@@ -23,6 +25,25 @@ public class DShapeModel {
 	    width = w;
 	    height = h;
 	    this.c = Color.GRAY;
+	}
+	
+	@Override
+	public void modelChanged(DShapeModel model) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public void removeListener(ModelListener ml)
+	{
+		if (listeners.contains(ml))
+		{
+			listeners.remove(ml);
+		}
+	}
+	
+	public void addListener(ModelListener ml)
+	{
+		listeners.add(ml);
 	}
 
 	public int getX() {
