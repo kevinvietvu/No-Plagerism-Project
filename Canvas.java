@@ -42,6 +42,17 @@ public class Canvas extends JPanel {
 	
 	public static void addShape(DShapeModel shape)
 	{
-		//Not sure what she wants for this 
+		if (shape instanceof DRectModel)
+		{
+			DRect rect = new DRect();
+			rect.info = (DRectModel) shape;
+			shapesList.add(rect);
+		}
+		if (shape instanceof DOvalModel)
+		{
+			DOval oval = new DOval();
+			oval.info = (DOvalModel) shape;
+			shapesList.add(oval);
+		}
 	}
 }

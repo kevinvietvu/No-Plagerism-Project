@@ -30,9 +30,11 @@ public class ControlPanel extends JPanel {
 				int random = (int )(Math.random() * 400 + 1);
 				int random2 = (int )(Math.random() * 400 + 1);
 				DRectModel bounds = new DRectModel(random, random2, 60, 45);
+				/**
 				DRect rect = new DRect();
-				rect.info = bounds;
-				Canvas.shapesList.add(rect);
+				rect.info = bounds; */
+				Canvas.addShape(bounds);
+				//Canvas.shapesList.add(rect);
 				
 			}
 		});
@@ -42,9 +44,11 @@ public class ControlPanel extends JPanel {
 				int random = (int )(Math.random() * 400 + 1);
 				int random2 = (int )(Math.random() * 400 + 1);
 				DOvalModel bounds = new DOvalModel(random, random2, 60, 45);
+				/**
 				DOval oval = new DOval();
-				oval.info = bounds;
-				Canvas.shapesList.add(oval);
+				oval.info = bounds; */
+				Canvas.addShape(bounds);
+				//Canvas.shapesList.add(oval);
 			}
 		});
 		JButton line = new JButton("Line");
