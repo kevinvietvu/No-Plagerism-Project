@@ -19,8 +19,8 @@ public class Canvas extends JPanel {
 		this.setOpaque(true);
 	    this.setBackground(Color.WHITE);
 	    shapesList = new ArrayList<>();
+	    //Adds clicking on shapes to select it.
 	    addMouseListener(new MouseAdapter() {
-	        @Override
 	        public void mouseClicked(MouseEvent e) {
 	            super.mouseClicked(e);
 	            System.out.println(e.getPoint());
@@ -88,7 +88,7 @@ public class Canvas extends JPanel {
 			{
 				DOval oval = (DOval) shape;
 				g.setColor(Color.CYAN);
-				g.drawRect(oval.info.getX(),oval.info.getY(),oval.info.getWidth(),oval.info.getHeight());
+				g.drawOval(oval.info.getX(),oval.info.getY(),oval.info.getWidth(),oval.info.getHeight());
 			}
 		}
 		repaint();
