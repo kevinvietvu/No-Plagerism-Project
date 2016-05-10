@@ -1,4 +1,7 @@
 import java.awt.*;
+
+import java.util.*;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -69,7 +72,33 @@ public class ControlPanel extends JPanel {
 		  }
 		} );
 		JButton moveFront = new JButton("Move To Front");
+		moveFront.addActionListener(new ActionListener() { 
+			public void actionPerformed(ActionEvent e) {
+				Canvas.printReverse();
+				System.out.println(" ");
+				if (Canvas.selected != null && !Canvas.shapesList.isEmpty())
+				{
+					Collections.swap(Canvas.shapesList, Canvas.shapesList.size() - 1, Canvas.shapesList.indexOf(Canvas.selected));
+					
+				}
+				
+				Canvas.printReverse();
+			}
+		});
 		JButton moveBack = new JButton("Move To Back");
+		moveBack.addActionListener(new ActionListener() { 
+			public void actionPerformed(ActionEvent e) {
+				Canvas.printReverse();
+				System.out.println(" ");
+				if (Canvas.selected != null && !Canvas.shapesList.isEmpty())
+				{
+					Collections.swap(Canvas.shapesList, 0, Canvas.shapesList.indexOf(Canvas.selected));
+					
+				}
+				
+				Canvas.printReverse();
+			}
+		});
 		JButton remove = new JButton("Remove Shape");
 		remove.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

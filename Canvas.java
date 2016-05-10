@@ -1,9 +1,7 @@
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Random;
+import java.util.*;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -63,11 +61,13 @@ public class Canvas extends JPanel {
 	   
 	}
 	
+
 	public void paintComponent(Graphics g)
 	{
 		super.paintComponent(g);
-		for (DShape d : shapesList)
+		for (ListIterator<DShape> iterator = shapesList.listIterator(shapesList.size()); iterator.hasPrevious();)
 		{
+			DShape d = (DShape) iterator.previous();
 			if (d.getName().equals("DRect"))
 			{	
 				DRect rect = (DRect) d;
@@ -80,40 +80,64 @@ public class Canvas extends JPanel {
 			}
 			if (selected != null)
 			{
-				DShape shape = shapesList.get(shapesList.indexOf(selected));
-				if (shape.getName().equals("DRect"))
+				if (shapesList.contains(selected))
 				{
-					DRect rect = (DRect) shape;
-					g.setColor(Color.CYAN);
-					g.drawRect(rect.info.getX(),rect.info.getY(),rect.info.getWidth(),rect.info.getHeight());
+					DShape shape = shapesList.get(shapesList.indexOf(selected));
+					if (shape.getName().equals("DRect"))
+					{
+						DRect rect = (DRect) shape;
+						g.setColor(Color.CYAN);
+						g.drawRect(rect.info.getX(),rect.info.getY(),rect.info.getWidth(),rect.info.getHeight());
+					}
+					else if (shape.getName().equals("DOval"))
+					{
+						DOval oval = (DOval) shape;
+						g.setColor(Color.CYAN);
+						g.drawOval(oval.info.getX(),oval.info.getY(),oval.info.getWidth(),oval.info.getHeight());
+					}		
 				}
-				else if (shape.getName().equals("DOval"))
-				{
-					DOval oval = (DOval) shape;
-					g.setColor(Color.CYAN);
-					g.drawOval(oval.info.getX(),oval.info.getY(),oval.info.getWidth(),oval.info.getHeight());
-				}			
 			}
 		}
 		repaint();
 	}
 	
-	public static void addShape(DShapeModel shape)
+	// testing purposes
+	public static void printList()
 	{
-		if (shape instanceof DRectModel)
+		int count = 1;
+		for (DShape d : shapesList)
+		{
+			System.out.println(count + " " + d.getName());
+			count++;
+		}
+	}
+	
+	// testing purposes
+	public static void printReverse()
+	{
+		int count = 1;
+		for (ListIterator<DShape> iterator = shapesList.listIterator(shapesList.size()); iterator.hasPrevious();)
+		{
+			System.out.println(count + " " + ((DShape) iterator.previous()).getName());
+			count++;
+		}
+	}
+	
+	public static void addShape(DShapeModel shapeModel)
+	{
+		if (shapeModel instanceof DRectModel)
 		{
 			DRect rect = new DRect();
-			rect.info = (DRectModel) shape;
+			rect.info = (DRectModel) shapeModel;
 			shapesList.add(rect);
-			DShapeModel.listeners.add(shape);
+			DShapeModel.listeners.add(shapeModel);
 		}
-		if (shape instanceof DOvalModel)
+		if (shapeModel instanceof DOvalModel)
 		{
 			DOval oval = new DOval();
-			oval.info = (DOvalModel) shape;
+			oval.info = (DOvalModel) shapeModel;
 			shapesList.add(oval);
-			DShapeModel.listeners.add(shape);
+			DShapeModel.listeners.add(shapeModel);
 		}
-		
 	}
 }
