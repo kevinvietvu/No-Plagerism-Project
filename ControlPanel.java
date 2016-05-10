@@ -71,6 +71,19 @@ public class ControlPanel extends JPanel {
 		JButton moveFront = new JButton("Move To Front");
 		JButton moveBack = new JButton("Move To Back");
 		JButton remove = new JButton("Remove Shape");
+		remove.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (Canvas.selected != null)
+				{
+					if (Canvas.shapesList.contains(Canvas.selected))
+					{
+						DShapeModel.listeners.remove(Canvas.selectedModel);
+						Canvas.shapesList.remove(Canvas.selected);
+						repaint();			
+					}
+				}
+			}
+		});
 		
 		shapePanel.setLayout(new BoxLayout(shapePanel, BoxLayout.X_AXIS)); 
 		shapePanel.add(new JLabel("Add"));
