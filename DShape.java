@@ -2,7 +2,7 @@ import java.awt.*;
 import java.awt.geom.Point2D;
 
 
-public class DShape{
+public class DShape implements ModelListener {
 	Shape s;
 	public DShapeModel info;
 	
@@ -11,9 +11,9 @@ public class DShape{
 		Shape s = new Rectangle(0,0,0,0);
 	}
 	
-	public Rectangle getBoundary()
+	public DShapeModel getBounds()
 	{
-		return (Rectangle) s;
+		return info;
 	}
 	
 	public boolean contains(Point2D p)
@@ -29,6 +29,12 @@ public class DShape{
 	public String getName()
 	{
 		return "DShape";
+	}
+
+	@Override
+	public void modelChanged(DShapeModel model) {
+		info = model;
+		
 	}
 
 }

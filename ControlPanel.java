@@ -33,10 +33,9 @@ public class ControlPanel extends JPanel {
 				int random4 = (int )(Math.random() * 150 + 10);
 				DRectModel bounds = new DRectModel(random, random2, random3, random4);
 				Canvas.addShape(bounds);
-
-				
 			}
 		});
+		
 		JButton oval = new JButton("Oval");
 		oval.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -48,14 +47,26 @@ public class ControlPanel extends JPanel {
 				Canvas.addShape(bounds);
 			}
 		});
+		
 		JButton line = new JButton("Line");
 		JButton text = new JButton("Text");
 		JButton setColor = new JButton("Set Color");
 		setColor.addActionListener(new ActionListener() { 
 		public void actionPerformed(ActionEvent e) {
-			Color initialcolor = Color.BLACK;
-			Color color = JColorChooser.showDialog(setColor, "Select a color", initialcolor);
+			Color initialcolor = Color.GRAY;
+			Color newColor = JColorChooser.showDialog(setColor, "Select a color", initialcolor);
+			if (Canvas.selectedModel == null)
+			{
+				return;
 			}
+			for (DShapeModel d : DShapeModel.listeners)
+			{
+				if (Canvas.selectedModel.equals(d))
+				d.setC(newColor);
+				Canvas.selected.modelChanged(d);
+				repaint();
+			} 
+		  }
 		} );
 		JButton moveFront = new JButton("Move To Front");
 		JButton moveBack = new JButton("Move To Back");
