@@ -18,8 +18,8 @@ public class DShape implements ModelListener {
 	
 	public boolean contains(Point2D p)
 	{
-		if (p.getX() <= info.getWidth() + info.getX() && p.getX() >= info.getX() && p.getY() <= info.getHeight() + info.getY() 
-		&& p.getY() >= info.getY())
+		if (p.getX() < this.info.getWidth() +  this.info.getX() - 1 && p.getX() >  this.info.getX() + 1 && p.getY() <  this.info.getHeight() +  this.info.getY() - 1
+		&& p.getY() >  this.info.getY() + 1)
 		{
 			return true;
 		}

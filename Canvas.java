@@ -9,7 +9,6 @@ import javax.xml.bind.Marshaller.Listener;
 
 public class Canvas extends JPanel {
 	static DShape selected;
-	static DShapeModel previousSelected;
 	static DShapeModel selectedModel;
 	public static ArrayList<DShape> shapesList;
 	
@@ -27,35 +26,54 @@ public class Canvas extends JPanel {
 	            System.out.println(e.getPoint());
 	            for (DShape d : shapesList)
 	            {
-	            	if (d.getName().equals("DRect"))
-	    			{
-	    				DRect rect = (DRect) d;
-	    				if (rect.contains(e.getPoint()))
-	    				{	
-	    					selected = rect;
-	    					selectedModel = rect.info;
-	    					System.out.println(selected.getName());
-	    					break;
-	    				}
-	    				else {
-	    					selected = null;
-	    				}
-	    			}
-	            	else if (d.getName().equals("DOval"))
-	    			{
-	    				DOval oval = (DOval) d;
-	    				if (oval.contains(e.getPoint()))
-	    				{
-	    					selected = oval;
-	    					selectedModel = oval.info;
-	    					System.out.println(selected.getName());
-	    					break;
-	    				}
-	    				else {
-	    					selected = null;
-	    				}	
-	    			}           	
-	            }
+	        		if (d.getName().equals("DRect"))
+	        	    {
+	        	    	DRect rect = (DRect) d;
+	        	    	if (rect.contains(e.getPoint()))
+	        	    	{	
+	        	    		selected = rect;
+	        	    		selectedModel = rect.info;
+	        	    		System.out.println(selected.getName());
+	        	    		break;
+	        	    	}
+	        	    	else {
+	        	    		selected = null;
+	        	    		selectedModel = null;
+	        	    	}
+	        	   	}
+	        	    else if (d.getName().equals("DOval"))
+	        	    {
+	        	    	DOval oval = (DOval) d;
+	        	    	if (oval.contains(e.getPoint()))
+	        	    	{
+	        	    		selected = oval;
+	        	    		selectedModel = oval.info;
+	        	    		System.out.println(selected.getName());
+	        	    		break;
+	        	    	}
+	        	    	else {
+	        	    		selected = null;
+	        	    		selectedModel = null;
+	        	    	}	
+	        	  	}
+	        	    else if (d.getName().equals("DLine"))
+	        	    {	        	
+	        	    	DLine line = (DLine) d;
+	        	    	if (line.contains(e.getPoint()))
+	        	    	{	        
+	        	    		selected = line;
+	        	    		selectedModel = line.info;
+	        	    		System.out.println(selected.getName());
+	        	    		break;
+	        	    	}
+	        	    	else {
+	         	    		selected = null;
+	         	    		selectedModel = null;
+	         	    	}
+	        	    	
+	        	  	} 
+	        	   	
+	            } 
 	        }
 	    });
 	   
@@ -64,19 +82,25 @@ public class Canvas extends JPanel {
 
 	public void paintComponent(Graphics g)
 	{
-		super.paintComponent(g);
+		Graphics2D g2 = (Graphics2D)g;
+		super.paintComponent(g2);
 		for (ListIterator<DShape> iterator = shapesList.listIterator(shapesList.size()); iterator.hasPrevious();)
 		{
 			DShape d = (DShape) iterator.previous();
 			if (d.getName().equals("DRect"))
 			{	
 				DRect rect = (DRect) d;
-				rect.draw(g);
+				rect.draw(g2);
 			}
 			if (d.getName().equals("DOval"))
 			{
 				DOval oval = (DOval) d;
-				oval.draw(g);
+				oval.draw(g2);
+			}
+			if (d.getName().equals("DLine"))
+			{
+				DLine line = (DLine) d;
+				line.draw(g2);
 			}
 			if (selected != null)
 			{
@@ -86,15 +110,22 @@ public class Canvas extends JPanel {
 					if (shape.getName().equals("DRect"))
 					{
 						DRect rect = (DRect) shape;
-						g.setColor(Color.CYAN);
-						g.drawRect(rect.info.getX(),rect.info.getY(),rect.info.getWidth(),rect.info.getHeight());
+						g2.setColor(Color.CYAN);
+						g2.drawRect(rect.info.getX(),rect.info.getY(),rect.info.getWidth(),rect.info.getHeight());
 					}
 					else if (shape.getName().equals("DOval"))
 					{
 						DOval oval = (DOval) shape;
-						g.setColor(Color.CYAN);
-						g.drawOval(oval.info.getX(),oval.info.getY(),oval.info.getWidth(),oval.info.getHeight());
-					}		
+						g2.setColor(Color.CYAN);
+						g2.drawOval(oval.info.getX(),oval.info.getY(),oval.info.getWidth(),oval.info.getHeight());
+					}
+					else if (shape.getName().equals("DLine"))
+					{
+						DLine line = (DLine) shape;
+						g2.setColor(Color.CYAN);
+						g2.drawRect(line.info.getX(),line.info.getY(),line.info.getWidth(),line.info.getHeight());
+					}
+					
 				}
 			}
 		}
@@ -120,6 +151,7 @@ public class Canvas extends JPanel {
 		{
 			System.out.println(count + " " + ((DShape) iterator.previous()).getName());
 			count++;
+		
 		}
 	}
 	
@@ -137,6 +169,13 @@ public class Canvas extends JPanel {
 			DOval oval = new DOval();
 			oval.info = (DOvalModel) shapeModel;
 			shapesList.add(oval);
+			DShapeModel.listeners.add(shapeModel);
+		}
+		if (shapeModel instanceof DLineModel)
+		{
+			DLine line = new DLine();
+			line.info = (DLineModel) shapeModel;
+			shapesList.add(line);
 			DShapeModel.listeners.add(shapeModel);
 		}
 	}

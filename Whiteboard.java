@@ -31,7 +31,6 @@ public class Whiteboard extends JFrame {
 	    
 	    frame.add(controls,BorderLayout.WEST);
 
-	    
 	    frame.pack();
 	    frame.setVisible(true);
 	

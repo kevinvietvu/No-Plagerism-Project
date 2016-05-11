@@ -52,6 +52,17 @@ public class ControlPanel extends JPanel {
 		});
 		
 		JButton line = new JButton("Line");
+		line.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int random = (int )(Math.random() * 350 + 2);
+				int random2 = (int )(Math.random() * 350 + 2);
+				int random3 = (int )(Math.random() * 150 + 10);
+				int random4 = (int )(Math.random() * 150 + 10);		
+				DLineModel bounds = new DLineModel(random, random2, random3, random4);	
+				//DLineModel bounds = new DLineModel(0,0,20,20);
+				Canvas.addShape(bounds);
+			}
+		});
 		JButton text = new JButton("Text");
 		JButton setColor = new JButton("Set Color");
 		setColor.addActionListener(new ActionListener() { 
@@ -79,7 +90,6 @@ public class ControlPanel extends JPanel {
 				if (Canvas.selected != null && !Canvas.shapesList.isEmpty())
 				{
 					Collections.swap(Canvas.shapesList, Canvas.shapesList.size() - 1, Canvas.shapesList.indexOf(Canvas.selected));
-					
 				}
 				
 				Canvas.printReverse();
@@ -93,10 +103,9 @@ public class ControlPanel extends JPanel {
 				if (Canvas.selected != null && !Canvas.shapesList.isEmpty())
 				{
 					Collections.swap(Canvas.shapesList, 0, Canvas.shapesList.indexOf(Canvas.selected));
-					
 				}
 				
-				Canvas.printReverse();
+				Canvas.printList();
 			}
 		});
 		JButton remove = new JButton("Remove Shape");
