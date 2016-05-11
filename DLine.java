@@ -30,8 +30,6 @@ public class DLine extends DShape {
 		
 	}
 	
-
-	
 	public String getName()
 	{
 		return "DLine";

@@ -11,6 +11,11 @@ public class DShape implements ModelListener {
 		Shape s = new Rectangle(0,0,0,0);
 	}
 	
+	public DShape(DShapeModel model)
+	{
+		Shape s = new Rectangle(model.getX(),model.getY(),model.getWidth(),model.getHeight());
+	}
+	
 	public DShapeModel getBounds()
 	{
 		return info;

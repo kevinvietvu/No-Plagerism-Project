@@ -102,6 +102,11 @@ public class Canvas extends JPanel {
 				DLine line = (DLine) d;
 				line.draw(g2);
 			}
+			if (d.getName().equals("DText"))
+			{
+				DText text = (DText) d;
+				text.draw(g2);
+			}
 			if (selected != null)
 			{
 				if (shapesList.contains(selected))
@@ -176,6 +181,13 @@ public class Canvas extends JPanel {
 			DLine line = new DLine();
 			line.info = (DLineModel) shapeModel;
 			shapesList.add(line);
+			DShapeModel.listeners.add(shapeModel);
+		}
+		if (shapeModel instanceof DTextModel)
+		{
+			DText text = new DText();
+			text.info = (DTextModel) shapeModel;
+			shapesList.add(text);
 			DShapeModel.listeners.add(shapeModel);
 		}
 	}

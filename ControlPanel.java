@@ -1,7 +1,7 @@
 import java.awt.*;
 
 import java.util.*;
-
+import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -9,7 +9,7 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 
 public class ControlPanel extends JPanel {
-	
+	static JTextField textDisplay;
 	public ControlPanel()
 	{
 		super();
@@ -63,7 +63,23 @@ public class ControlPanel extends JPanel {
 				Canvas.addShape(bounds);
 			}
 		});
+		
 		JButton text = new JButton("Text");
+		text.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (textDisplay.getText().equals(""))
+				{
+					return;
+				}
+				int random = (int )(Math.random() * 400 + 2);
+				int random2 = (int )(Math.random() * 400 + 2);
+				int random3 = (int )(Math.random() * 100 + 5);
+				int random4 = (int )(Math.random() * 100 + 5);		
+				DTextModel bounds = new DTextModel(random, random2, random3, random4);	
+				Canvas.addShape(bounds);
+			}
+		});
+		
 		JButton setColor = new JButton("Set Color");
 		setColor.addActionListener(new ActionListener() { 
 		public void actionPerformed(ActionEvent e) {
@@ -136,10 +152,26 @@ public class ControlPanel extends JPanel {
 		colorPanel.add(setColor);
 		colorPanel.add(Box.createRigidArea(new Dimension(0,50)));
 		
-		JTextField font = new JTextField();
-		font.setMaximumSize(new Dimension(100, font.getPreferredSize().height));
+		textDisplay = new JTextField(10);
+		JComboBox<Font> fonts = new JComboBox<Font>(DText.fonts);
+		//this gets the actual font name into the box, without like java.awt.font blah blah
+		fonts.setRenderer(new DefaultListCellRenderer() {
+		   @Override
+		   public Component getListCellRendererComponent(JList<?> list,
+		         Object value, int index, boolean isSelected, boolean cellHasFocus) {
+		      if (value != null) {
+		         Font font = (Font) value;
+		         value = font.getName();
+		      }
+		      return super.getListCellRendererComponent(list, value, index,
+		            isSelected, cellHasFocus);
+		   }
+		});
+		textDisplay.setMaximumSize(new Dimension(100, textDisplay.getPreferredSize().height));
 		fontBox.setLayout(new BoxLayout(fontBox, BoxLayout.X_AXIS));
-		fontBox.add(font);
+		fontBox.add(textDisplay);
+		fontBox.add(Box.createRigidArea(new Dimension(20,0)));
+		fontBox.add(fonts);
 		colorPanel.add(Box.createRigidArea(new Dimension(0,50)));
 		
 		movePanel.setLayout(new BoxLayout(movePanel, BoxLayout.X_AXIS));
