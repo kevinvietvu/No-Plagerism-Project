@@ -16,9 +16,9 @@ public class DShape implements ModelListener {
 		Shape s = new Rectangle(model.getX(),model.getY(),model.getWidth(),model.getHeight());
 	}
 	
-	public DShapeModel getBounds()
+	public Rectangle getBounds()
 	{
-		return info;
+		return info.getBounds();
 	}
 	
 	public boolean contains(Point2D p)

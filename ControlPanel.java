@@ -11,6 +11,11 @@ import javax.swing.border.LineBorder;
 public class ControlPanel extends JPanel {
 	static JTextField textDisplay;
 	static JComboBox<Font> fonts;
+	static JButton setColor;
+	static JButton moveFront;
+	static JButton moveBack;
+	static JButton remove;
+	
 	public ControlPanel()
 	{
 		super();
@@ -72,9 +77,8 @@ public class ControlPanel extends JPanel {
 				{
 					return;
 				}
-				
-				int random = (int )(Math.random() * 200 + 2);
-				int random2 = (int )(Math.random() * 200 + 2);
+				int random = (int )(Math.random() * 400 + 2);
+				int random2 = (int )(Math.random() * 400 + 2);
 			/*	int random3 = (int )(Math.random() * 100 + 5);
 				int random4 = (int )(Math.random() * 100 + 5);		
 				DTextModel bounds = new DTextModel(random, random2, random3, random4);	 */
@@ -83,7 +87,11 @@ public class ControlPanel extends JPanel {
 			}
 		});
 		
-		JButton setColor = new JButton("Set Color");
+		setColor = new JButton("Set Color");
+		if (Canvas.selected == null)
+		{
+			setColor.setEnabled(false);
+		}
 		setColor.addActionListener(new ActionListener() { 
 		public void actionPerformed(ActionEvent e) {
 			Color initialcolor = Color.GRAY;
@@ -100,8 +108,12 @@ public class ControlPanel extends JPanel {
 				repaint();
 			} 
 		  }
-		} );
-		JButton moveFront = new JButton("Move To Front");
+		});
+		moveFront = new JButton("Move To Front");
+		if (Canvas.selected == null)
+		{
+			moveFront.setEnabled(false);
+		}
 		moveFront.addActionListener(new ActionListener() { 
 			public void actionPerformed(ActionEvent e) {
 				Canvas.printReverse();
@@ -113,7 +125,11 @@ public class ControlPanel extends JPanel {
 				Canvas.printReverse();
 			}
 		});
-		JButton moveBack = new JButton("Move To Back");
+		moveBack = new JButton("Move To Back");
+		if (Canvas.selected == null)
+		{
+			moveBack.setEnabled(false);
+		}
 		moveBack.addActionListener(new ActionListener() { 
 			public void actionPerformed(ActionEvent e) {
 				Canvas.printReverse();
@@ -125,13 +141,15 @@ public class ControlPanel extends JPanel {
 				Canvas.printList();
 			}
 		});
-		JButton remove = new JButton("Remove Shape");
+		remove = new JButton("Remove Shape");
+		if (Canvas.selected == null)
+		{
+			remove.setEnabled(false);
+		}
 		remove.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (Canvas.selected != null)
-				{
-					if (Canvas.shapesList.contains(Canvas.selected))
-					{
+				if (Canvas.selected != null) {
+					if (Canvas.shapesList.contains(Canvas.selected)) {
 						DShapeModel.listeners.remove(Canvas.selectedModel);
 						Canvas.shapesList.remove(Canvas.selected);
 						repaint();			
@@ -140,6 +158,7 @@ public class ControlPanel extends JPanel {
 			}
 		});
 		
+	
 		shapePanel.setLayout(new BoxLayout(shapePanel, BoxLayout.X_AXIS)); 
 		shapePanel.add(new JLabel("Add"));
 		shapePanel.add(rect);
@@ -190,5 +209,21 @@ public class ControlPanel extends JPanel {
 		for(Component comp: this.getComponents()){
 			((JComponent)comp).setAlignmentX(LEFT_ALIGNMENT); // aligns all the panels to the left margin.
 		}
+	}
+	
+	public static void enableButtons()
+	{
+		setColor.setEnabled(true);
+		moveFront.setEnabled(true);
+		moveBack.setEnabled(true);
+		remove.setEnabled(true);
+	}
+	
+	public static void disableButtons()
+	{
+		setColor.setEnabled(false);
+		moveFront.setEnabled(false);
+		moveBack.setEnabled(false);
+		remove.setEnabled(false);
 	}
 }

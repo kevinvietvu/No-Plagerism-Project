@@ -30,62 +30,73 @@ public class Canvas extends JPanel {
 	        	    	DRect rect = (DRect) d;
 	        	    	if (rect.contains(e.getPoint()))
 	        	    	{	
+	        	    		
 	        	    		selected = rect;
 	        	    		selectedModel = rect.info;
+	        	    		ControlPanel.enableButtons();
 	        	    		System.out.println(selected.getName());
 	        	    		break;
 	        	    	}
 	        	    	else {
+	        	    		ControlPanel.disableButtons();
 	        	    		selected = null;
 	        	    		selectedModel = null;
 	        	    	}
 	        	   	}
 	        	    else if (d.getName().equals("DOval"))
 	        	    {
+	        	    	ControlPanel.enableButtons();
 	        	    	DOval oval = (DOval) d;
 	        	    	if (oval.contains(e.getPoint()))
 	        	    	{
 	        	    		selected = oval;
 	        	    		selectedModel = oval.info;
+	        	    		ControlPanel.enableButtons();
 	        	    		System.out.println(selected.getName());
 	        	    		break;
 	        	    	}
 	        	    	else {
+	        	    		ControlPanel.disableButtons();
 	        	    		selected = null;
 	        	    		selectedModel = null;
 	        	    	}	
 	        	  	}
 	        	    else if (d.getName().equals("DLine"))
-	        	    {	        	
+	        	    {	  
+	        	    	ControlPanel.enableButtons();
 	        	    	DLine line = (DLine) d;
 	        	    	if (line.contains(e.getPoint()))
 	        	    	{	        
 	        	    		selected = line;
 	        	    		selectedModel = line.info;
+	        	    		ControlPanel.enableButtons();
 	        	    		System.out.println(selected.getName());
 	        	    		break;
 	        	    	}
 	        	    	else {
+	        	    		ControlPanel.disableButtons();
 	         	    		selected = null;
 	         	    		selectedModel = null;
 	         	    	}
 	        	    	
 	        	  	}
 	        	    else if (d.getName().equals("DText"))
-	        	    {	        	
+	        	    {	        
+	        	    	ControlPanel.enableButtons();
 	        	    	DText text = (DText) d;
 	        	    	if (text.contains(e.getPoint()))
 	        	    	{	        
 	        	    		selected = text;
 	        	    		selectedModel = text.info;
+	        	    		ControlPanel.enableButtons();
 	        	    		System.out.println(selected.getName());
 	        	    		break;
 	        	    	}
 	        	    	else {
+	        	    		ControlPanel.disableButtons();
 	         	    		selected = null;
 	         	    		selectedModel = null;
 	         	    	}
-	        	    	
 	        	  	}
 	        	   	
 	            } 

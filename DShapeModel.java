@@ -27,6 +27,11 @@ public class DShapeModel {
 	    this.c = Color.GRAY;
 	}
 	
+	public Rectangle getBounds()
+	{
+		return new Rectangle(this.x,this.y,this.width,this.height);
+	}
+	
 	public boolean equals(DShapeModel d)
 	{
 		if (d.getX() == this.x && d.getY() == this.y && d.getWidth() == this.width && d.getHeight() == this.height && d.getC() == this.c)

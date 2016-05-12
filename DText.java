@@ -49,11 +49,18 @@ public class DText extends DShape {
 	           
 	    g.setColor(info.getC());
 	    
-	    g.drawRect(info.getX(),(int) (info.getY()),info.getWidth(),info.getHeight());
+	    //place holder box drawn to see if the text fits inside the box
+	    g.drawRect(info.getX(), info.getY(),info.getWidth(),info.getHeight());
 	    
-	    g.setClip(info.getX(),(int) (info.getY()) - (info.getY() / 2),info.getWidth(),info.getHeight() * 2);
+	    Shape clip = g.getClip();
+	    
+	    //Clips the width of the text within the box
+	    g.setClip(clip.getBounds().createIntersection(getBounds()));
 	    
 	    g.drawString(text, info.getX() , info.getY() + info.getHeight() - fontDescent );
+	    
+	    //Restore old clip
+	    g.setClip(clip);
 
 	}
 	
