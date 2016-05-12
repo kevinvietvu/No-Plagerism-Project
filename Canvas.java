@@ -8,6 +8,7 @@ import javax.swing.border.LineBorder;
 import javax.xml.bind.Marshaller.Listener;
 
 public class Canvas extends JPanel {
+	static double previousFontSize;
 	static DShape selected;
 	static DShapeModel selectedModel;
 	public static ArrayList<DShape> shapesList;
@@ -71,7 +72,23 @@ public class Canvas extends JPanel {
 	         	    		selectedModel = null;
 	         	    	}
 	        	    	
-	        	  	} 
+	        	  	}
+	        	    else if (d.getName().equals("DText"))
+	        	    {	        	
+	        	    	DText text = (DText) d;
+	        	    	if (text.contains(e.getPoint()))
+	        	    	{	        
+	        	    		selected = text;
+	        	    		selectedModel = text.info;
+	        	    		System.out.println(selected.getName());
+	        	    		break;
+	        	    	}
+	        	    	else {
+	         	    		selected = null;
+	         	    		selectedModel = null;
+	         	    	}
+	        	    	
+	        	  	}
 	        	   	
 	            } 
 	        }
@@ -92,22 +109,22 @@ public class Canvas extends JPanel {
 				DRect rect = (DRect) d;
 				rect.draw(g2);
 			}
-			if (d.getName().equals("DOval"))
+			else if (d.getName().equals("DOval"))
 			{
 				DOval oval = (DOval) d;
 				oval.draw(g2);
 			}
-			if (d.getName().equals("DLine"))
+			else if (d.getName().equals("DLine"))
 			{
 				DLine line = (DLine) d;
 				line.draw(g2);
 			}
-			if (d.getName().equals("DText"))
+			else if (d.getName().equals("DText"))
 			{
 				DText text = (DText) d;
 				text.draw(g2);
 			}
-			if (selected != null)
+			else if (selected != null)
 			{
 				if (shapesList.contains(selected))
 				{
@@ -129,6 +146,12 @@ public class Canvas extends JPanel {
 						DLine line = (DLine) shape;
 						g2.setColor(Color.CYAN);
 						g2.drawRect(line.info.getX(),line.info.getY(),line.info.getWidth(),line.info.getHeight());
+					}
+					else if (shape.getName().equals("DText"))
+					{
+						DText text = (DText) shape;
+						g2.setColor(Color.CYAN);
+						g2.drawRect(text.info.getX(),text.info.getY(),text.info.getWidth(),text.info.getHeight());
 					}
 					
 				}

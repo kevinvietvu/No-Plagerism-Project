@@ -10,6 +10,7 @@ import javax.swing.border.LineBorder;
 
 public class ControlPanel extends JPanel {
 	static JTextField textDisplay;
+	static JComboBox<Font> fonts;
 	public ControlPanel()
 	{
 		super();
@@ -71,11 +72,13 @@ public class ControlPanel extends JPanel {
 				{
 					return;
 				}
-				int random = (int )(Math.random() * 400 + 2);
-				int random2 = (int )(Math.random() * 400 + 2);
-				int random3 = (int )(Math.random() * 100 + 5);
+				
+				int random = (int )(Math.random() * 200 + 2);
+				int random2 = (int )(Math.random() * 200 + 2);
+				/*int random3 = (int )(Math.random() * 100 + 5);
 				int random4 = (int )(Math.random() * 100 + 5);		
-				DTextModel bounds = new DTextModel(random, random2, random3, random4);	
+				DTextModel bounds = new DTextModel(random, random2, random3, random4);	 */
+				DTextModel bounds = new DTextModel(random,random2,150,150); 
 				Canvas.addShape(bounds);
 			}
 		});
@@ -153,7 +156,7 @@ public class ControlPanel extends JPanel {
 		colorPanel.add(Box.createRigidArea(new Dimension(0,50)));
 		
 		textDisplay = new JTextField(10);
-		JComboBox<Font> fonts = new JComboBox<Font>(DText.fonts);
+		fonts = new JComboBox<Font>(DText.fonts);
 		//this gets the actual font name into the box, without like java.awt.font blah blah
 		fonts.setRenderer(new DefaultListCellRenderer() {
 		   @Override
