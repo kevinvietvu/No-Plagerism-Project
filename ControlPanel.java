@@ -75,10 +75,10 @@ public class ControlPanel extends JPanel {
 				
 				int random = (int )(Math.random() * 200 + 2);
 				int random2 = (int )(Math.random() * 200 + 2);
-				/*int random3 = (int )(Math.random() * 100 + 5);
+			/*	int random3 = (int )(Math.random() * 100 + 5);
 				int random4 = (int )(Math.random() * 100 + 5);		
 				DTextModel bounds = new DTextModel(random, random2, random3, random4);	 */
-				DTextModel bounds = new DTextModel(random,random2,150,150); 
+				DTextModel bounds = new DTextModel(random,random2,100,100); 
 				Canvas.addShape(bounds);
 			}
 		});
@@ -110,7 +110,6 @@ public class ControlPanel extends JPanel {
 				{
 					Collections.swap(Canvas.shapesList, Canvas.shapesList.size() - 1, Canvas.shapesList.indexOf(Canvas.selected));
 				}
-				
 				Canvas.printReverse();
 			}
 		});
@@ -123,7 +122,6 @@ public class ControlPanel extends JPanel {
 				{
 					Collections.swap(Canvas.shapesList, 0, Canvas.shapesList.indexOf(Canvas.selected));
 				}
-				
 				Canvas.printList();
 			}
 		});

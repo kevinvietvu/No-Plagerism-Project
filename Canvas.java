@@ -4,8 +4,6 @@ import java.awt.event.MouseEvent;
 import java.util.*;
 
 import javax.swing.*;
-import javax.swing.border.LineBorder;
-import javax.xml.bind.Marshaller.Listener;
 
 public class Canvas extends JPanel {
 	static double previousFontSize;
@@ -124,7 +122,7 @@ public class Canvas extends JPanel {
 				DText text = (DText) d;
 				text.draw(g2);
 			}
-			else if (selected != null)
+			if (selected != null)
 			{
 				if (shapesList.contains(selected))
 				{
@@ -147,12 +145,13 @@ public class Canvas extends JPanel {
 						g2.setColor(Color.CYAN);
 						g2.drawRect(line.info.getX(),line.info.getY(),line.info.getWidth(),line.info.getHeight());
 					}
+					
 					else if (shape.getName().equals("DText"))
 					{
 						DText text = (DText) shape;
 						g2.setColor(Color.CYAN);
 						g2.drawRect(text.info.getX(),text.info.getY(),text.info.getWidth(),text.info.getHeight());
-					}
+					} 
 					
 				}
 			}
@@ -212,6 +211,6 @@ public class Canvas extends JPanel {
 			text.info = (DTextModel) shapeModel;
 			shapesList.add(text);
 			DShapeModel.listeners.add(shapeModel);
-		}
+		} 
 	}
 }

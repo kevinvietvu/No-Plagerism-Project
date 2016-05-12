@@ -12,6 +12,7 @@ public class DText extends DShape {
     FontMetrics metrics;
     int fontHeight;
     int fontDescent;
+    int fontAscend;
     
 	public DText()
 	{
@@ -26,12 +27,11 @@ public class DText extends DShape {
 			selectedFont = new Font(fontType, Font.PLAIN, (int) fontSize);
 			metrics = g.getFontMetrics(selectedFont);
 			fontHeight = metrics.getHeight();
+			fontAscend = metrics.getAscent();
 			fontDescent = metrics.getDescent();
 			fontSize = (fontSize * 1.10) + 1;
 		}
-		
 		return selectedFont;
-		
 	}
 	
 	//RenderingHints makes the text smoother and less edgy I think...
@@ -51,9 +51,9 @@ public class DText extends DShape {
 	    
 	    g.drawRect(info.getX(),(int) (info.getY()),info.getWidth(),info.getHeight());
 	    
-	    g.setClip(info.getX(),(int) (info.getY()),info.getWidth(),info.getHeight() * 2);
+	    g.setClip(info.getX(),(int) (info.getY()) - (info.getY() / 2),info.getWidth(),info.getHeight() * 2);
 	    
-	    g.drawString(text, info.getX() , info.getY() + info.getHeight() - fontDescent  );
+	    g.drawString(text, info.getX() , info.getY() + info.getHeight() - fontDescent );
 
 	}
 	
