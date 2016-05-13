@@ -120,7 +120,7 @@ public class ControlPanel extends JPanel {
 				System.out.println(" ");
 				if (Canvas.selected != null && !Canvas.shapesList.isEmpty())
 				{
-					Collections.swap(Canvas.shapesList, Canvas.shapesList.size() - 1, Canvas.shapesList.indexOf(Canvas.selected));
+					Collections.swap(Canvas.shapesList, 0, Canvas.shapesList.indexOf(Canvas.selected));
 				}
 				Canvas.printReverse();
 			}
@@ -136,7 +136,7 @@ public class ControlPanel extends JPanel {
 				System.out.println(" ");
 				if (Canvas.selected != null && !Canvas.shapesList.isEmpty())
 				{
-					Collections.swap(Canvas.shapesList, 0, Canvas.shapesList.indexOf(Canvas.selected));
+					Collections.swap(Canvas.shapesList, Canvas.shapesList.size() - 1, Canvas.shapesList.indexOf(Canvas.selected));
 				}
 				Canvas.printList();
 			}
