@@ -152,7 +152,11 @@ public class ControlPanel extends JPanel {
 					if (Canvas.shapesList.contains(Canvas.selected)) {
 						DShapeModel.listeners.remove(Canvas.selectedModel);
 						Canvas.shapesList.remove(Canvas.selected);
-						repaint();			
+						repaint();
+						setColor.setEnabled(false);
+						moveFront.setEnabled(false);
+						moveBack.setEnabled(false);
+						remove.setEnabled(false);
 					}
 				}
 			}
