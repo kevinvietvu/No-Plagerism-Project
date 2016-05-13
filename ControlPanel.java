@@ -104,7 +104,7 @@ public class ControlPanel extends JPanel {
 			{
 				if (Canvas.selectedModel.equals(d))
 				d.setC(newColor);
-				Canvas.selected.modelChanged(d);
+				//Canvas.selected.modelChanged(d);
 				repaint();
 			} 
 		  }

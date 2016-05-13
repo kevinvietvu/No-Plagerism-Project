@@ -1,11 +1,12 @@
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 import java.util.*;
 
 import javax.swing.*;
 
-public class Canvas extends JPanel {
+public class Canvas extends JPanel implements MouseMotionListener {
 	static double previousFontSize;
 	static DShape selected;
 	static DShapeModel selectedModel;
@@ -19,6 +20,7 @@ public class Canvas extends JPanel {
 	    this.setBackground(Color.WHITE);
 	    shapesList = new ArrayList<>();
 	    //Adds clicking on shapes to select it.
+	    addMouseMotionListener(this);
 	    addMouseListener(new MouseAdapter() {
 	        public void mouseClicked(MouseEvent e) {
 	            super.mouseClicked(e);
@@ -100,6 +102,7 @@ public class Canvas extends JPanel {
 	        	  	}
 	        	   	
 	            } 
+	           
 	        }
 	    });
 	   
@@ -223,5 +226,43 @@ public class Canvas extends JPanel {
 			shapesList.add(text);
 			DShapeModel.listeners.add(shapeModel);
 		} 
+	}
+
+
+	@Override
+	public void mouseDragged(MouseEvent e) 
+	{
+		if(selected != null)
+		{
+			if(selected.getName().equals("DRect"))
+			{
+				update(e);
+			}
+			
+			else if(selected.getName().equals("DOval"))
+			{
+				update(e);
+			}
+			
+			else if(selected.getName().equals("DLine"))
+			{
+				update(e);
+			}
+		}
+		
+	}
+	
+	public void update(MouseEvent e)
+	{
+		selected.info.setX(e.getX());
+		selected.info.setY(e.getY());
+		
+	}
+
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }
