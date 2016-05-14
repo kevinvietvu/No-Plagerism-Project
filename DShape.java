@@ -9,9 +9,13 @@ public class DShape implements ModelListener {
 	
 	public DShape()
 	{
+<<<<<<< HEAD
 		Shape s = new Rectangle(0,0,0,0);
 		info = new DShapeModel();
 		
+=======
+		Shape s = new Rectangle(10,10,20,20);
+>>>>>>> c42b81463d0f6a4c2755dea154ca1ec65ff7510e
 	}
 	
 	public DShape(DShapeModel model)
