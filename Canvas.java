@@ -1,19 +1,17 @@
 import java.awt.*;
-import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 import java.util.*;
-import java.util.List;
 
 import javax.swing.*;
 
-public class Canvas extends JPanel  implements MouseMotionListener {
+public class Canvas extends JPanel implements MouseMotionListener {
 	static double previousFontSize;
 	static DShape selected;
 	static DShapeModel selectedModel;
 	public static ArrayList<DShape> shapesList;
 	private ArrayList<Point> knobs;
-	
 	
 	
 	
@@ -31,93 +29,97 @@ public class Canvas extends JPanel  implements MouseMotionListener {
 	        public void mouseClicked(MouseEvent e) {
 	            super.mouseClicked(e);
 	            System.out.println(e.getPoint());
-	            ControlPanel.disableButtons();
 	            for (DShape d : shapesList)
 	            {
 	        		if (d.getName().equals("DRect"))
 	        	    {
 	        	    	DRect rect = (DRect) d;
 	        	    	if (rect.contains(e.getPoint()))
-	        	    	{	 		
+	        	    	{	
+	        	    		
 	        	    		selected = rect;
 	        	    		selectedModel = rect.info;
-<<<<<<< HEAD
 	        	    		ControlPanel.enableButtons();
 	        	    		knobs.add(new Point(selected.getBounds().x-3, selected.getBounds().y-3));
 	        	    		knobs.add(new Point(selected.getBounds().x-3, (int)selected.getBounds().getMaxY()-3));
 	        	    		knobs.add(new Point((int)selected.getBounds().getMaxX()-3, selected.getBounds().y-3));
 	        	    		knobs.add(new Point((int)selected.getBounds().getMaxX()-3, (int)selected.getBounds().getMaxY()-3));
-=======
->>>>>>> c42b81463d0f6a4c2755dea154ca1ec65ff7510e
 	        	    		System.out.println(selected.getName());
 	        	    		System.out.println("Knobs are: " + getKnobs());
 	        	    		System.out.println(selected.getBounds());
 	        	    		break;
 	        	    	}
 	        	    	else {
-	        	    	    selected = null;
+	        	    		ControlPanel.disableButtons();
+	        	    		selected = null;
 	        	    		selectedModel = null;
-<<<<<<< HEAD
 	        	    		getKnobs().clear();
 	        	    	}
-=======
-	        	    	}   	 	
->>>>>>> c42b81463d0f6a4c2755dea154ca1ec65ff7510e
 	        	   	}
 	        	    else if (d.getName().equals("DOval"))
 	        	    {
+	        	    	ControlPanel.enableButtons();
 	        	    	DOval oval = (DOval) d;
 	        	    	if (oval.contains(e.getPoint()))
 	        	    	{
 	        	    		selected = oval;
 	        	    		selectedModel = oval.info;
+	        	    		ControlPanel.enableButtons();
 	        	    		System.out.println(selected.getName());
 	        	    		break;
 	        	    	}
 	        	    	else {
-	        	    	    selected = null;
+	        	    		ControlPanel.disableButtons();
+	        	    		selected = null;
 	        	    		selectedModel = null;
-	        	    	}
-	        	    		
+	        	    	}	
 	        	  	}
 	        	    else if (d.getName().equals("DLine"))
 	        	    {	  
+	        	    	ControlPanel.enableButtons();
 	        	    	DLine line = (DLine) d;
 	        	    	if (line.contains(e.getPoint()))
-	        	    	{	      
+	        	    	{	        
 	        	    		selected = line;
 	        	    		selectedModel = line.info;
+	        	    		ControlPanel.enableButtons();
 	        	    		System.out.println(selected.getName());
 	        	    		break;
 	        	    	}
 	        	    	else {
-	        	    	    selected = null;
-	        	    		selectedModel = null;
-	        	    	}
+	        	    		ControlPanel.disableButtons();
+	         	    		selected = null;
+	         	    		selectedModel = null;
+	         	    	}
+	        	    	
 	        	  	}
 	        	    else if (d.getName().equals("DText"))
 	        	    {	        
+	        	    	ControlPanel.enableButtons();
 	        	    	DText text = (DText) d;
 	        	    	if (text.contains(e.getPoint()))
-	        	    	{	
-	        	    		ControlPanel.enableButtons();
+	        	    	{	        
 	        	    		selected = text;
 	        	    		selectedModel = text.info;
 	        	    		ControlPanel.enableButtons();
 	        	    		System.out.println(selected.getName());
 	        	    		break;
-	        	    	} 
-	        	    	else {
-	        	    	    selected = null;
-	        	    		selectedModel = null;
 	        	    	}
+	        	    	else {
+	        	    		ControlPanel.disableButtons();
+	         	    		selected = null;
+	         	    		selectedModel = null;
+	         	    	}
 	        	  	}
 	        	   	
 	            } 
+	           
 	        }
-	    });  
+	    });
+	   
 	}
 	
+
 	public void paintComponent(Graphics g)
 	{
 		Graphics2D g2 = (Graphics2D)g;
@@ -179,14 +181,14 @@ public class Canvas extends JPanel  implements MouseMotionListener {
 						g2.setColor(Color.CYAN);
 						g2.drawRect(line.info.getX(),line.info.getY(),line.info.getWidth(),line.info.getHeight());
 					}
+					
 					else if (shape.getName().equals("DText"))
 					{
 						DText text = (DText) shape;
 						g2.setColor(Color.CYAN);
 						g2.drawRect(text.info.getX(),text.info.getY(),text.info.getWidth(),text.info.getHeight());
-						((DTextModel) selectedModel).setFontType(((Font) ControlPanel.fonts.getSelectedItem()).getName());
-						((DTextModel) selectedModel).setText(ControlPanel.textDisplay.getText());		
-					} 	
+					} 
+					
 				}
 			}
 		}
@@ -241,13 +243,15 @@ public class Canvas extends JPanel  implements MouseMotionListener {
 		}
 		if (shapeModel instanceof DTextModel)
 		{
-			DText textLine = new DText();
-			textLine.info = (DTextModel) shapeModel;
-			shapesList.add(textLine);
+			DText text = new DText();
+			text.info = (DTextModel) shapeModel;
+			shapesList.add(text);
 			DShapeModel.listeners.add(shapeModel);
 		} 
 	}
-	
+
+
+	@Override
 	public void mouseDragged(MouseEvent e) 
 	{
 		if(selected != null)
@@ -267,7 +271,6 @@ public class Canvas extends JPanel  implements MouseMotionListener {
 			{
 				update(e);
 			}
-<<<<<<< HEAD
 			
 			else if(selected.getName().equals("DText"))
 			{
@@ -275,22 +278,17 @@ public class Canvas extends JPanel  implements MouseMotionListener {
 			}
 		}
 		
-=======
-			else if (selected.getName().equals("DText"))
-			{
-				update(e);
-			}
-		}	
->>>>>>> c42b81463d0f6a4c2755dea154ca1ec65ff7510e
 	}
 	
 	public void update(MouseEvent e)
 	{
-		selectedModel.setX(e.getX());
-		selectedModel.setY(e.getY());
+		selected.info.setX(e.getX());
+		selected.info.setY(e.getY());
 		
 	}
-	
+
+
+	@Override
 	public void mouseMoved(MouseEvent e) {
 		// TODO Auto-generated method stub
 		
