@@ -11,13 +11,13 @@ import javax.swing.border.LineBorder;
 public class ControlPanel extends JPanel {
 	static JTextField textDisplay;
 	static JComboBox<Font> fonts;
+	static GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+    static Font[] allFonts = ge.getAllFonts();
 	static JButton setColor;
 	static JButton moveFront;
 	static JButton moveBack;
 	static JButton remove;
-	static GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-    static Font[] allFonts = ge.getAllFonts();
-	
+
 	public ControlPanel()
 	{
 		super();
@@ -81,7 +81,6 @@ public class ControlPanel extends JPanel {
 				int random4 = (int )(Math.random() * 100 + 5);		
 				DTextModel bounds = new DTextModel(random, random2, random3, random4);	 */
 				DTextModel bounds = new DTextModel(random,random2,200,100,"Hello","Dialog.plain"); 
-
 				Canvas.addShape(bounds);
 			}
 		});
@@ -91,11 +90,15 @@ public class ControlPanel extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			Color initialcolor = Color.GRAY;
 			Color newColor = JColorChooser.showDialog(setColor, "Select a color", initialcolor);
+			if (Canvas.selectedModel == null)
+			{
+				return;
+			}
 			for (DShapeModel d : DShapeModel.listeners)
 			{
 				if (Canvas.selectedModel.equals(d))
-				d.setC(newColor);
-				Canvas.selected.modelChanged(d);
+				Canvas.selectedModel.setC(newColor);
+				Canvas.selected.modelChanged(Canvas.selectedModel);
 				repaint();
 			} 
 		  }
@@ -107,9 +110,9 @@ public class ControlPanel extends JPanel {
 				System.out.println(" ");
 				if (Canvas.selected != null && !Canvas.shapesList.isEmpty())
 				{
-					Collections.swap(Canvas.shapesList, Canvas.shapesList.size() - 1, Canvas.shapesList.indexOf(Canvas.selected));
+					Collections.swap(Canvas.shapesList, 0, Canvas.shapesList.indexOf(Canvas.selected));
 				}
-				Canvas.printReverse();
+				Canvas.printList();
 			}
 		});
 		moveBack = new JButton("Move To Back");
@@ -119,15 +122,14 @@ public class ControlPanel extends JPanel {
 				System.out.println(" ");
 				if (Canvas.selected != null && !Canvas.shapesList.isEmpty())
 				{
-					Collections.swap(Canvas.shapesList, 0, Canvas.shapesList.indexOf(Canvas.selected));
+					Collections.swap(Canvas.shapesList, Canvas.shapesList.size() - 1, Canvas.shapesList.indexOf(Canvas.selected));
 				}
-				Canvas.printList();
+				Canvas.printReverse();
 			}
 		});
 		remove = new JButton("Remove Shape");
 		remove.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				disableButtons();
 				if (Canvas.selected != null) {
 					if (Canvas.shapesList.contains(Canvas.selected)) {
 						DShapeModel.listeners.remove(Canvas.selectedModel);
@@ -138,11 +140,9 @@ public class ControlPanel extends JPanel {
 			}
 		});
 		
-	
 		shapePanel.setLayout(new BoxLayout(shapePanel, BoxLayout.X_AXIS)); 
 		shapePanel.add(new JLabel("Add"));
 		shapePanel.add(rect);
-		
 		shapePanel.add(oval);
 		shapePanel.add(line);
 		shapePanel.add(text);
