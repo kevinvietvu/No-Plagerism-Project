@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
 
 
 public class DShape implements ModelListener {
@@ -9,11 +10,15 @@ public class DShape implements ModelListener {
 	public DShape()
 	{
 		Shape s = new Rectangle(0,0,0,0);
+		info = new DShapeModel();
+		
 	}
 	
 	public DShape(DShapeModel model)
 	{
 		Shape s = new Rectangle(model.getX(),model.getY(),model.getWidth(),model.getHeight());
+
+		
 	}
 	
 	public Rectangle getBounds()
@@ -41,5 +46,5 @@ public class DShape implements ModelListener {
 		info = model;
 		
 	}
-
+	
 }

@@ -11,6 +11,9 @@ public class Canvas extends JPanel implements MouseMotionListener {
 	static DShape selected;
 	static DShapeModel selectedModel;
 	public static ArrayList<DShape> shapesList;
+	private ArrayList<Point> knobs;
+	
+	
 	
 	public Canvas()
 	{
@@ -19,6 +22,7 @@ public class Canvas extends JPanel implements MouseMotionListener {
 		this.setOpaque(true);
 	    this.setBackground(Color.WHITE);
 	    shapesList = new ArrayList<>();
+	    knobs = new ArrayList<>();
 	    //Adds clicking on shapes to select it.
 	    addMouseMotionListener(this);
 	    addMouseListener(new MouseAdapter() {
@@ -36,13 +40,20 @@ public class Canvas extends JPanel implements MouseMotionListener {
 	        	    		selected = rect;
 	        	    		selectedModel = rect.info;
 	        	    		ControlPanel.enableButtons();
+	        	    		knobs.add(new Point(selected.getBounds().x-3, selected.getBounds().y-3));
+	        	    		knobs.add(new Point(selected.getBounds().x-3, (int)selected.getBounds().getMaxY()-3));
+	        	    		knobs.add(new Point((int)selected.getBounds().getMaxX()-3, selected.getBounds().y-3));
+	        	    		knobs.add(new Point((int)selected.getBounds().getMaxX()-3, (int)selected.getBounds().getMaxY()-3));
 	        	    		System.out.println(selected.getName());
+	        	    		System.out.println("Knobs are: " + getKnobs());
+	        	    		System.out.println(selected.getBounds());
 	        	    		break;
 	        	    	}
 	        	    	else {
 	        	    		ControlPanel.disableButtons();
 	        	    		selected = null;
 	        	    		selectedModel = null;
+	        	    		getKnobs().clear();
 	        	    	}
 	        	   	}
 	        	    else if (d.getName().equals("DOval"))
@@ -144,8 +155,19 @@ public class Canvas extends JPanel implements MouseMotionListener {
 					if (shape.getName().equals("DRect"))
 					{
 						DRect rect = (DRect) shape;
+						Point upperLeft = getKnobs().get(0);
+						Point bottomLeft = getKnobs().get(1);
+						Point upperRight = getKnobs().get(2);
+						Point bottomRight = getKnobs().get(3);
+						
 						g2.setColor(Color.CYAN);
 						g2.drawRect(rect.info.getX(),rect.info.getY(),rect.info.getWidth(),rect.info.getHeight());
+						g2.setColor(Color.BLACK);
+						g2.fillRect(upperLeft.x, upperLeft.y, 9, 9);
+						g2.fillRect(bottomLeft.x, bottomLeft.y, 9, 9);
+						g2.fillRect(upperRight.x, upperRight.y, 9, 9);
+						g2.fillRect(bottomRight.x, bottomRight.y, 9, 9);
+						
 					}
 					else if (shape.getName().equals("DOval"))
 					{
@@ -237,6 +259,7 @@ public class Canvas extends JPanel implements MouseMotionListener {
 			if(selected.getName().equals("DRect"))
 			{
 				update(e);
+		
 			}
 			
 			else if(selected.getName().equals("DOval"))
@@ -245,6 +268,11 @@ public class Canvas extends JPanel implements MouseMotionListener {
 			}
 			
 			else if(selected.getName().equals("DLine"))
+			{
+				update(e);
+			}
+			
+			else if(selected.getName().equals("DText"))
 			{
 				update(e);
 			}
@@ -264,5 +292,10 @@ public class Canvas extends JPanel implements MouseMotionListener {
 	public void mouseMoved(MouseEvent e) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	public ArrayList<Point> getKnobs()
+	{
+		return knobs;
 	}
 }

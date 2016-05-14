@@ -40,7 +40,12 @@ public class ControlPanel extends JPanel {
 				int random2 = (int )(Math.random() * 400 + 1);
 				int random3 = (int )(Math.random() * 150 + 10);
 				int random4 = (int )(Math.random() * 150 + 10);
-				DRectModel bounds = new DRectModel(random, random2, random3, random4);
+				DRectModel bounds = new DRectModel();
+				bounds.setX(random);
+				bounds.setY(random2);
+				bounds.setWidth(random3);
+				bounds.setHeight(random4);
+				
 				Canvas.addShape(bounds);
 			}
 		});
