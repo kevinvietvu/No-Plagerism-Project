@@ -8,7 +8,7 @@ public class DShape implements ModelListener {
 	
 	public DShape()
 	{
-		Shape s = new Rectangle(0,0,0,0);
+		Shape s = new Rectangle(10,10,20,20);
 	}
 	
 	public DShape(DShapeModel model)

@@ -1,12 +1,12 @@
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
 import java.util.*;
+import java.util.List;
 
 import javax.swing.*;
 
-public class Canvas extends JPanel implements MouseMotionListener {
+public class Canvas extends JPanel {
 	static double previousFontSize;
 	static DShape selected;
 	static DShapeModel selectedModel;
@@ -20,63 +20,57 @@ public class Canvas extends JPanel implements MouseMotionListener {
 	    this.setBackground(Color.WHITE);
 	    shapesList = new ArrayList<>();
 	    //Adds clicking on shapes to select it.
-	    addMouseMotionListener(this);
 	    addMouseListener(new MouseAdapter() {
 	        public void mouseClicked(MouseEvent e) {
 	            super.mouseClicked(e);
 	            System.out.println(e.getPoint());
+	            ControlPanel.disableButtons();
 	            for (DShape d : shapesList)
 	            {
 	        		if (d.getName().equals("DRect"))
 	        	    {
+	        			
 	        	    	DRect rect = (DRect) d;
 	        	    	if (rect.contains(e.getPoint()))
-	        	    	{	
-	        	    		
+	        	    	{	 		
 	        	    		selected = rect;
 	        	    		selectedModel = rect.info;
-	        	    		ControlPanel.enableButtons();
 	        	    		System.out.println(selected.getName());
 	        	    		break;
 	        	    	}
 	        	    	else {
-	        	    		ControlPanel.disableButtons();
 	        	    		selected = null;
 	        	    		selectedModel = null;
 	        	    	}
 	        	   	}
 	        	    else if (d.getName().equals("DOval"))
 	        	    {
-	        	    	ControlPanel.enableButtons();
+	        	    	
 	        	    	DOval oval = (DOval) d;
 	        	    	if (oval.contains(e.getPoint()))
 	        	    	{
 	        	    		selected = oval;
 	        	    		selectedModel = oval.info;
-	        	    		ControlPanel.enableButtons();
 	        	    		System.out.println(selected.getName());
 	        	    		break;
 	        	    	}
 	        	    	else {
-	        	    		ControlPanel.disableButtons();
 	        	    		selected = null;
 	        	    		selectedModel = null;
 	        	    	}	
 	        	  	}
 	        	    else if (d.getName().equals("DLine"))
 	        	    {	  
-	        	    	ControlPanel.enableButtons();
+	        	    	
 	        	    	DLine line = (DLine) d;
 	        	    	if (line.contains(e.getPoint()))
-	        	    	{	        
+	        	    	{	      
 	        	    		selected = line;
 	        	    		selectedModel = line.info;
-	        	    		ControlPanel.enableButtons();
 	        	    		System.out.println(selected.getName());
 	        	    		break;
 	        	    	}
 	        	    	else {
-	        	    		ControlPanel.disableButtons();
 	         	    		selected = null;
 	         	    		selectedModel = null;
 	         	    	}
@@ -84,10 +78,10 @@ public class Canvas extends JPanel implements MouseMotionListener {
 	        	  	}
 	        	    else if (d.getName().equals("DText"))
 	        	    {	        
-	        	    	ControlPanel.enableButtons();
 	        	    	DText text = (DText) d;
 	        	    	if (text.contains(e.getPoint()))
-	        	    	{	        
+	        	    	{	
+	        	    		ControlPanel.enableButtons();
 	        	    		selected = text;
 	        	    		selectedModel = text.info;
 	        	    		ControlPanel.enableButtons();
@@ -95,14 +89,13 @@ public class Canvas extends JPanel implements MouseMotionListener {
 	        	    		break;
 	        	    	}
 	        	    	else {
-	        	    		ControlPanel.disableButtons();
+	        	    		
 	         	    		selected = null;
 	         	    		selectedModel = null;
 	         	    	}
 	        	  	}
 	        	   	
 	            } 
-	           
 	        }
 	    });
 	   
@@ -165,8 +158,12 @@ public class Canvas extends JPanel implements MouseMotionListener {
 						DText text = (DText) shape;
 						g2.setColor(Color.CYAN);
 						g2.drawRect(text.info.getX(),text.info.getY(),text.info.getWidth(),text.info.getHeight());
-					} 
-					
+						((DTextModel) selectedModel).setFontType(((Font) ControlPanel.fonts.getSelectedItem()).getName());
+						if (!ControlPanel.textDisplay.getText().isEmpty())
+						{ 
+							((DTextModel) selectedModel).setText(ControlPanel.textDisplay.getText());
+						}
+					} 	
 				}
 			}
 		}
@@ -221,48 +218,10 @@ public class Canvas extends JPanel implements MouseMotionListener {
 		}
 		if (shapeModel instanceof DTextModel)
 		{
-			DText text = new DText();
-			text.info = (DTextModel) shapeModel;
-			shapesList.add(text);
+			DText textLine = new DText();
+			textLine.info = (DTextModel) shapeModel;
+			shapesList.add(textLine);
 			DShapeModel.listeners.add(shapeModel);
 		} 
-	}
-
-
-	@Override
-	public void mouseDragged(MouseEvent e) 
-	{
-		if(selected != null)
-		{
-			if(selected.getName().equals("DRect"))
-			{
-				update(e);
-			}
-			
-			else if(selected.getName().equals("DOval"))
-			{
-				update(e);
-			}
-			
-			else if(selected.getName().equals("DLine"))
-			{
-				update(e);
-			}
-		}
-		
-	}
-	
-	public void update(MouseEvent e)
-	{
-		selected.info.setX(e.getX());
-		selected.info.setY(e.getY());
-		
-	}
-
-
-	@Override
-	public void mouseMoved(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
 	}
 }

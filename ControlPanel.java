@@ -15,6 +15,8 @@ public class ControlPanel extends JPanel {
 	static JButton moveFront;
 	static JButton moveBack;
 	static JButton remove;
+	static GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+    static Font[] allFonts = ge.getAllFonts();
 	
 	public ControlPanel()
 	{
@@ -73,64 +75,33 @@ public class ControlPanel extends JPanel {
 		JButton text = new JButton("Text");
 		text.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (textDisplay.getText().equals(""))
-				{
-					return;
-				}
 				int random = (int )(Math.random() * 400 + 2);
 				int random2 = (int )(Math.random() * 400 + 2);
 			/*	int random3 = (int )(Math.random() * 100 + 5);
 				int random4 = (int )(Math.random() * 100 + 5);		
 				DTextModel bounds = new DTextModel(random, random2, random3, random4);	 */
-				DTextModel bounds = new DTextModel(random,random2,100,100); 
+				DTextModel bounds = new DTextModel(random,random2,200,100,"Hello","Dialog.plain"); 
+
 				Canvas.addShape(bounds);
 			}
 		});
 		
 		setColor = new JButton("Set Color");
-		if (Canvas.selected == null)
-		{
-			setColor.setEnabled(false);
-		}
 		setColor.addActionListener(new ActionListener() { 
 		public void actionPerformed(ActionEvent e) {
 			Color initialcolor = Color.GRAY;
 			Color newColor = JColorChooser.showDialog(setColor, "Select a color", initialcolor);
-			if (Canvas.selectedModel == null)
-			{
-				return;
-			}
 			for (DShapeModel d : DShapeModel.listeners)
 			{
 				if (Canvas.selectedModel.equals(d))
 				d.setC(newColor);
-				//Canvas.selected.modelChanged(d);
+				Canvas.selected.modelChanged(d);
 				repaint();
 			} 
 		  }
 		});
 		moveFront = new JButton("Move To Front");
-		if (Canvas.selected == null)
-		{
-			moveFront.setEnabled(false);
-		}
 		moveFront.addActionListener(new ActionListener() { 
-			public void actionPerformed(ActionEvent e) {
-				Canvas.printReverse();
-				System.out.println(" ");
-				if (Canvas.selected != null && !Canvas.shapesList.isEmpty())
-				{
-					Collections.swap(Canvas.shapesList, 0, Canvas.shapesList.indexOf(Canvas.selected));
-				}
-				Canvas.printReverse();
-			}
-		});
-		moveBack = new JButton("Move To Back");
-		if (Canvas.selected == null)
-		{
-			moveBack.setEnabled(false);
-		}
-		moveBack.addActionListener(new ActionListener() { 
 			public void actionPerformed(ActionEvent e) {
 				Canvas.printReverse();
 				System.out.println(" ");
@@ -138,25 +109,30 @@ public class ControlPanel extends JPanel {
 				{
 					Collections.swap(Canvas.shapesList, Canvas.shapesList.size() - 1, Canvas.shapesList.indexOf(Canvas.selected));
 				}
+				Canvas.printReverse();
+			}
+		});
+		moveBack = new JButton("Move To Back");
+		moveBack.addActionListener(new ActionListener() { 
+			public void actionPerformed(ActionEvent e) {
+				Canvas.printReverse();
+				System.out.println(" ");
+				if (Canvas.selected != null && !Canvas.shapesList.isEmpty())
+				{
+					Collections.swap(Canvas.shapesList, 0, Canvas.shapesList.indexOf(Canvas.selected));
+				}
 				Canvas.printList();
 			}
 		});
 		remove = new JButton("Remove Shape");
-		if (Canvas.selected == null)
-		{
-			remove.setEnabled(false);
-		}
 		remove.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				disableButtons();
 				if (Canvas.selected != null) {
 					if (Canvas.shapesList.contains(Canvas.selected)) {
 						DShapeModel.listeners.remove(Canvas.selectedModel);
 						Canvas.shapesList.remove(Canvas.selected);
-						repaint();
-						setColor.setEnabled(false);
-						moveFront.setEnabled(false);
-						moveBack.setEnabled(false);
-						remove.setEnabled(false);
+						repaint();			
 					}
 				}
 			}
@@ -177,7 +153,7 @@ public class ControlPanel extends JPanel {
 		colorPanel.add(Box.createRigidArea(new Dimension(0,50)));
 		
 		textDisplay = new JTextField(10);
-		fonts = new JComboBox<Font>(DText.fonts);
+		fonts = new JComboBox<Font>(allFonts);
 		//this gets the actual font name into the box, without like java.awt.font blah blah
 		fonts.setRenderer(new DefaultListCellRenderer() {
 		   @Override
@@ -192,6 +168,7 @@ public class ControlPanel extends JPanel {
 		   }
 		});
 		textDisplay.setMaximumSize(new Dimension(100, textDisplay.getPreferredSize().height));
+		disableButtons();
 		fontBox.setLayout(new BoxLayout(fontBox, BoxLayout.X_AXIS));
 		fontBox.add(textDisplay);
 		fontBox.add(Box.createRigidArea(new Dimension(20,0)));
@@ -217,17 +194,13 @@ public class ControlPanel extends JPanel {
 	
 	public static void enableButtons()
 	{
-		setColor.setEnabled(true);
-		moveFront.setEnabled(true);
-		moveBack.setEnabled(true);
-		remove.setEnabled(true);
+		textDisplay.setEnabled(true);
+		fonts.setEnabled(true);
 	}
 	
 	public static void disableButtons()
 	{
-		setColor.setEnabled(false);
-		moveFront.setEnabled(false);
-		moveBack.setEnabled(false);
-		remove.setEnabled(false);
+		textDisplay.setEnabled(false);
+		fonts.setEnabled(false);
 	}
 }
