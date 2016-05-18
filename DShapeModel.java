@@ -9,7 +9,7 @@ public class DShapeModel {
 	public Color c;
 	public static ArrayList<DShapeModel> listeners = new ArrayList<>();
 	
-	DShapeModel()
+	public DShapeModel()
 	{
 		x = 10;
 		y = 10;
@@ -18,7 +18,7 @@ public class DShapeModel {
 		c = Color.GRAY;
 	}
 	
-	DShapeModel(int x, int y,int w, int h)
+	public DShapeModel(int x, int y,int w, int h)
 	{
 		this.x = x;
 		this.y = y;

@@ -4,6 +4,14 @@ import java.util.*;
 import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.XMLDecoder;
+import java.beans.XMLEncoder;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -12,11 +20,13 @@ public class ControlPanel extends JPanel {
 	static JTextField textDisplay;
 	static JComboBox<Font> fonts;
 	static GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-    static Font[] allFonts = ge.getAllFonts();
+    	static Font[] allFonts = ge.getAllFonts();
 	static JButton setColor;
 	static JButton moveFront;
 	static JButton moveBack;
 	static JButton remove;
+	static JButton open;
+	static JButton save;
 
 	public ControlPanel()
 	{
@@ -115,7 +125,8 @@ public class ControlPanel extends JPanel {
 				System.out.println(" ");
 				if (Canvas.selected != null && !Canvas.shapesList.isEmpty())
 				{
-					Collections.swap(Canvas.shapesList, 0, Canvas.shapesList.indexOf(Canvas.selected));
+					Canvas.shapesList.remove(Canvas.shapesList.indexOf(Canvas.selected));
+					Canvas.shapesList.add(0, Canvas.selected);
 				}
 				Canvas.printList();
 			}
@@ -127,7 +138,8 @@ public class ControlPanel extends JPanel {
 				System.out.println(" ");
 				if (Canvas.selected != null && !Canvas.shapesList.isEmpty())
 				{
-					Collections.swap(Canvas.shapesList, Canvas.shapesList.size() - 1, Canvas.shapesList.indexOf(Canvas.selected));
+					Canvas.shapesList.remove(Canvas.shapesList.indexOf(Canvas.selected));
+					Canvas.shapesList.add(Canvas.selected);
 				}
 				Canvas.printReverse();
 			}
@@ -145,6 +157,48 @@ public class ControlPanel extends JPanel {
 			}
 		});
 		
+		open = new JButton("Open");
+		open.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String result = JOptionPane.showInputDialog("File Name", null);
+                if (result != null) {
+                    File f = new File(result);
+            		try {
+                        XMLDecoder xmlIn = new XMLDecoder(new BufferedInputStream(new FileInputStream(f))); 
+                        DShape[] shapeArray = (DShape[]) xmlIn.readObject();
+                        xmlIn.close();
+                        Canvas.shapesList.clear();
+                        DShapeModel.listeners.clear();
+                        for(DShape shape : shapeArray) {
+                        	Canvas.shapesList.add(shape);
+                        	DShapeModel.listeners.add(shape.info);
+                        }
+                		repaint();
+                    } catch (IOException x) {
+                        x.printStackTrace();
+                    }
+                }
+			}
+		});
+		
+		save = new JButton("Save");
+		save.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String result = JOptionPane.showInputDialog("File Name", null);
+                if (result != null) {
+                    File f = new File(result);
+                    try {
+                        XMLEncoder xmlOut = new XMLEncoder(new BufferedOutputStream(new FileOutputStream(f)));
+                        DShape[] shapeArray = Canvas.shapesList.toArray(new DShape[Canvas.shapesList.size()]);
+                        xmlOut.writeObject(shapeArray);
+                        xmlOut.close();
+                    } catch (IOException x) {
+                    	x.printStackTrace();
+                    }
+                }
+			}
+		});
+		
 		shapePanel.setLayout(new BoxLayout(shapePanel, BoxLayout.X_AXIS)); 
 		shapePanel.add(new JLabel("Add"));
 		shapePanel.add(rect);
@@ -155,6 +209,8 @@ public class ControlPanel extends JPanel {
 		
 		colorPanel.setLayout(new BoxLayout(colorPanel, BoxLayout.X_AXIS));
 		colorPanel.add(setColor);
+		colorPanel.add(open);
+		colorPanel.add(save);
 		colorPanel.add(Box.createRigidArea(new Dimension(0,50)));
 		
 		textDisplay = new JTextField(10);
