@@ -1,10 +1,16 @@
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 public class Canvas extends JPanel implements MouseMotionListener, MouseListener {
@@ -20,10 +26,20 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseListener
 	public Point anchorPoint;
 	DRect rect;
 	boolean dragging, draggingUl, draggingBl, draggingUr, draggingBr;
+	private int x,y;
+	public JButton saveImage;
+	public JPanel save;
 	public Canvas()
 	{
+		
 		super();
+		saveImage = new JButton("Save as PNG");
+		save = new JPanel();
+		save.add(saveImage);
 		this.setPreferredSize(new Dimension(500,500));
+		this.setLayout(new BorderLayout());
+		this.add(save, BorderLayout.BEFORE_FIRST_LINE);
+		addButton();
 		this.setOpaque(true);
 	    this.setBackground(Color.WHITE);
 	    shapesList = new ArrayList<>();
@@ -190,7 +206,6 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseListener
 		} 
 	}
 
-
 	@Override
 	public void mouseDragged(MouseEvent e) 
 	{
@@ -205,12 +220,34 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseListener
 				selected.info.setX(p.x - offsetX);
 				selected.info.setY(p.y - offsetY);
 			}
+			
 			else if(draggingUl == true)
 			{
 				int width = selected.info.getWidth() -dx;
 				int height = selected.info.getHeight() -dy;
+				if(ul.x - anchorPoint.x >= 0 || ul.y - anchorPoint.y >= 0)
+				{
+					
+					System.out.println("working");
+					//anchorPoint = br.getLocation();
+					//Point newAnchorPoint = br.getLocation();
+					//System.out.println("bottom Location" + anchorPoint);
+					
+					//selected.info.setBounds(selected.info.getX() + dx, selected.info.getY() + dy, Math.abs(e.getX()-newAnchorPoint.x), Math.abs(e.getY()-newAnchorPoint.y));
+				}
+				//int width = Math.abs(anchorPoint.x - movingPoint.x);
+				//int height = Math.abs(anchorPoint.y - movingPoint.y);
+				//selected.info.setBounds(selected.info.getX() + dx, selected.info.getY() + dy, width, height);
+				System.out.println(ul);
+				//selected.info.setBounds(selected.info.getX() + dx, selected.info.getY() + dy, Math.abs(e.getX()-anchorPoint.x), Math.abs(e.getY()-anchorPoint.y));
 				selected.info.setBounds(selected.info.getX() + dx, selected.info.getY() + dy, width, height);
-				/*if(selected.info.width <= 10 || selected.info.height <= 10)
+				
+
+				//System.out.println(ul);
+				
+				//selected.info.setBounds(, y, w, h);
+				
+				/*if(selected.info.width == 0 || selected.info.height == 0)
 				{
 					selected.info.setBounds(selected.info.x + dx, selected.info.y + dy, 10, 10);
 					
@@ -240,10 +277,13 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseListener
 				int height = dy;
 				selected.info.setBounds(selected.info.getX(), selected.info.getY(), width, height);
 			}
+		       
+		 }
+		
 			
 			
 		}
-	}
+
 
 		/*int x = e.getX();
 		int y = e.getY();
@@ -464,6 +504,7 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseListener
 				anchorPoint = br.getLocation();
 				System.out.println("upper left knob has been pressed. anchor point is " + anchorPoint);
 			}
+			
 			if(selected.contains(e.getPoint()))
 			{
 				dragging = true;
@@ -517,10 +558,43 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseListener
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		movingPoint = null;
-		draggingUl = false;
+		//draggingUl = false;
 		draggingBl =false;
 		draggingUr = false;
 		draggingBr = false;
+		
+	}
+	
+	public void saveImage(File file)
+	{
+		BufferedImage image = (BufferedImage) createImage(this.getWidth(), this.getHeight());
+		Graphics g = image.getGraphics();
+		paintAll(g);
+		g.dispose();
+		try{
+			ImageIO.write(image, "png", file);
+		}
+		catch(IOException e){
+			e.printStackTrace();
+		}
+	}
+	
+	public void addButton()
+	{
+		saveImage.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(selected != null)
+				{
+					selected = null;
+				}
+				String result = JOptionPane.showInputDialog("File Name", null);
+				if(result != null) {
+					File f = new File(result);
+					saveImage(f);
+					
+				}
+			}
+		});
 		
 	}
 }

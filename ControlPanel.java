@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
 import java.io.BufferedInputStream;
@@ -12,6 +13,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import javax.imageio.*;
+import java.io.*;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -20,19 +23,22 @@ public class ControlPanel extends JPanel {
 	static JTextField textDisplay;
 	static JComboBox<Font> fonts;
 	static GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-    	static Font[] allFonts = ge.getAllFonts();
+    static Font[] allFonts = ge.getAllFonts();
 	static JButton setColor;
 	static JButton moveFront;
 	static JButton moveBack;
 	static JButton remove;
 	static JButton open;
 	static JButton save;
+	public Canvas view;
 
 	public ControlPanel()
 	{
 		super();
 		this.addButtons();
+		//view = new Canvas();
 	}
+	
 	
 	public void addButtons()
 	{
@@ -199,6 +205,7 @@ public class ControlPanel extends JPanel {
 			}
 		});
 		
+		
 		shapePanel.setLayout(new BoxLayout(shapePanel, BoxLayout.X_AXIS)); 
 		shapePanel.add(new JLabel("Add"));
 		shapePanel.add(rect);
@@ -264,4 +271,5 @@ public class ControlPanel extends JPanel {
 		textDisplay.setEnabled(false);
 		fonts.setEnabled(false);
 	}
+	
 }
