@@ -15,32 +15,35 @@ public class DText extends DShape {
 	
 	public Font computeFont(Graphics g)
 	{
-		while (info.getHeight() > fontHeight)
+		
+		double fontSize = 1.0;
+		selectedFont = new Font(((DTextModel) info).getFontType(), Font.PLAIN, (int) fontSize);
+		FontMetrics metrics = new FontMetrics(selectedFont) {};
+		while (metrics.getHeight() <= info.getHeight() )
 		{	
 			fontSize = (fontSize * 1.10) + 1;
-			selectedFont = new Font(((DTextModel) info).getFontType(), Font.PLAIN, (int) fontSize);
-			metrics = g.getFontMetrics(selectedFont);
-			fontHeight = metrics.getHeight();
-			fontDescent = metrics.getDescent();
-			fontSize = (fontSize * 1.10) + 1;
+			Font biggerFont = selectedFont.deriveFont((float)fontSize);
+			metrics = new FontMetrics(biggerFont) {};
 		}
-		return selectedFont;
+		return selectedFont.deriveFont((float)fontSize);
 	}
 	
 	//RenderingHints makes the text smoother and less edgy I think...
 	public void draw(Graphics g)
 	{	
+		
+		
 		RenderingHints rh = new RenderingHints(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
 
 	    rh.put(RenderingHints.KEY_RENDERING,RenderingHints.VALUE_RENDER_QUALITY);
 
 	    ((Graphics2D) g).setRenderingHints(rh);
 
-	    selectedFont = computeFont(g);
+	    Font f = computeFont(g);
 	    
-	    selectedFont = new Font(((DTextModel) info).getFontType(), Font.PLAIN, (int) fontSize);
+	    //selectedFont = new Font(((DTextModel) info).getFontType(), Font.PLAIN, (int) fontSize);
 		
-	    g.setFont(selectedFont);
+	    g.setFont(f);
 	           
 	    g.setColor(info.getC());
 	    
@@ -52,16 +55,22 @@ public class DText extends DShape {
 	    //Clips the width of the text within the box
 	    g.setClip(clip.getBounds().createIntersection(getBounds()));
 	    
-	    g.drawString(((DTextModel) info).getText(), info.getX() , info.getY() + info.getHeight() - fontDescent );
+	    g.drawString(((DTextModel) info).getText(), info.getX() , info.getY() + info.getHeight());
 	    
 	    //Restore old clip
 	    g.setClip(clip);
-
+	    
 	}
 	
 	public String getName()
 	{
 		return "DText";
+	}
+	
+	public String getFontType()
+	{
+		DTextModel info = new DTextModel();
+		return info.getFontType();
 	}
 	
 }

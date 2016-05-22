@@ -1,10 +1,13 @@
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.geom.*;
+import java.util.ArrayList;
 
 public class DLine extends DShape {
 	private static final int HIT_BOX_SIZE = 4;
 	Line2D.Double line = new Line2D.Double();
+	
 	public DLine()
 	{
 		super();
@@ -34,5 +37,6 @@ public class DLine extends DShape {
 	{
 		return "DLine";
 	}
+	
 	
 }

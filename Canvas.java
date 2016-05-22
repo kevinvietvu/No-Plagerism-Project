@@ -1,7 +1,6 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -22,13 +21,18 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseListener
 	int offsetX, offsetY;
 	public Point upperLeft, bottomLeft, upperRight, bottomRight;
 	public Rectangle ul, bl, ur,br;
-	public Point movingPoint;
-	public Point anchorPoint;
+	private Point movingPoint;
+	private Point anchorPoint;
 	DRect rect;
+	DOval oval;
+	DText text;
+	DLine line;
 	boolean dragging, draggingUl, draggingBl, draggingUr, draggingBr;
-	private int x,y;
 	public JButton saveImage;
 	public JPanel save;
+	public Point p;
+	private static final int KNOB_SIZE = 9;
+	private static final int OFFSET = 3;
 	public Canvas()
 	{
 		
@@ -50,14 +54,77 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseListener
 	   
 	}
 	
-	public void defineKnobs()
+	public ArrayList<Point> getKnobs()
 	{
-		upperLeft = new Point(selected.getBounds().x, selected.getBounds().y);
- 		bottomLeft= new Point(selected.getBounds().x, (int)selected.getBounds().getMaxY());
- 		upperRight = new Point((int)selected.getBounds().getMaxX(), selected.getBounds().y);
- 		bottomRight = new Point((int)selected.getBounds().getMaxX(), (int)selected.getBounds().getMaxY());
+		return knobs;
+	}
+
+	public void setKnobs()
+	{
+		getKnobs().get(0).setLocation(new Point(selected.getBounds().x-OFFSET, selected.getBounds().y-OFFSET));
+		getKnobs().get(1).setLocation(new Point(selected.getBounds().x-OFFSET, (int)selected.getBounds().getMaxY()-OFFSET));
+		getKnobs().get(2).setLocation(new Point((int)selected.getBounds().getMaxX()-OFFSET, selected.getBounds().y-OFFSET));
+		getKnobs().get(3).setLocation(new Point((int)selected.getBounds().getMaxX()-OFFSET, (int)selected.getBounds().getMaxY()-OFFSET));
+		
+	}
+
+	public void setAnchorPoint(Point p)
+	{
+		this.anchorPoint = p;
 	}
 	
+	public void setMovingPoint(Point p)
+	{
+		this.movingPoint = p;
+	}
+
+	private void defineKnobs()
+	{
+		if(selected.equals("DLine"))
+		{
+			upperLeft = new Point(selected.getBounds().x, selected.getBounds().y);
+			bottomRight = new Point((int)selected.getBounds().getMaxX(), (int)selected.getBounds().getMaxY());
+		}
+		
+		upperLeft = new Point(selected.getBounds().x, selected.getBounds().y);
+		bottomLeft= new Point(selected.getBounds().x, (int)selected.getBounds().getMaxY());
+		upperRight = new Point((int)selected.getBounds().getMaxX(), selected.getBounds().y);
+		bottomRight = new Point((int)selected.getBounds().getMaxX(), (int)selected.getBounds().getMaxY());
+		
+	}
+
+	private void createKnobs()
+	{
+		if(selected.equals("DLine"))
+		{
+			ul = new Rectangle(upperLeft.x , upperLeft.y, KNOB_SIZE , KNOB_SIZE);
+			br = new Rectangle(bottomRight.x, bottomRight.y, KNOB_SIZE ,KNOB_SIZE);
+		}
+		ul = new Rectangle(upperLeft.x -OFFSET , upperLeft.y - OFFSET, KNOB_SIZE , KNOB_SIZE);
+		bl = new Rectangle(bottomLeft.x-OFFSET, bottomLeft.y -OFFSET, KNOB_SIZE, KNOB_SIZE);
+		ur = new Rectangle(upperRight.x -OFFSET, upperRight.y-OFFSET, KNOB_SIZE, KNOB_SIZE);
+		br = new Rectangle(bottomRight.x -OFFSET, bottomRight.y -OFFSET, KNOB_SIZE ,KNOB_SIZE);
+	
+	}
+
+	private void drawKnobs(Graphics2D g2)
+	{
+		if(selected.getName().equals("DLine"))
+		{
+			g2.setColor(Color.BLACK);
+			g2.fillRect(upperLeft.x , upperLeft.y , KNOB_SIZE, KNOB_SIZE);
+			g2.fillRect(bottomRight.x, bottomRight.y, KNOB_SIZE, KNOB_SIZE);
+			
+		}
+		else
+		{
+		g2.setColor(Color.BLACK);
+		g2.fillRect(upperLeft.x-OFFSET, upperLeft.y-OFFSET, KNOB_SIZE, KNOB_SIZE);
+		g2.fillRect(bottomLeft.x-OFFSET, bottomLeft.y-OFFSET, KNOB_SIZE, KNOB_SIZE);
+		g2.fillRect(upperRight.x-OFFSET, upperRight.y-OFFSET, KNOB_SIZE, KNOB_SIZE);
+		g2.fillRect(bottomRight.x-OFFSET, bottomRight.y-OFFSET, KNOB_SIZE, KNOB_SIZE);
+		}
+	}
 
 	public void paintComponent(Graphics g)
 	{
@@ -97,52 +164,53 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseListener
 						// creates point objects for the knobs
 						defineKnobs();
 						DRect rect = (DRect) shape;
-						g2.setColor(Color.CYAN);
-						g2.drawRect(rect.info.getX(),rect.info.getY(),rect.info.getWidth(),rect.info.getHeight());
 						
 						// creating the knobs as rectangle objects
-						ul = new Rectangle(upperLeft.x -3 , upperLeft.y - 3, 9 , 9);
-						bl = new Rectangle(bottomLeft.x-3, bottomLeft.y -3, 9, 9);
-						ur = new Rectangle(upperRight.x -3, upperRight.y-3, 9, 9);
-						br = new Rectangle(bottomRight.x -3, bottomRight.y -3, 9 ,9);
+						createKnobs();
 						
 						// drawing the knobs
-						g2.setColor(Color.BLACK);
-						g2.fillRect(ul.x, ul.y, ul.width, ul.height);
-						g2.fillRect(bl.x, bl.y, bl.width, bl.height);
-						g2.fillRect(ur.x, ur.y, ur.width, ur.height);
-						g2.fillRect(br.x, br.y, br.width, br.height);
-						
-						
+						drawKnobs(g2);
 					}
-					else if (shape.getName().equals("DOval"))
+					else if ("DOval".equals(shape.getName()))
 					{
-						DOval oval = (DOval) shape;
-						g2.setColor(Color.CYAN);
-						g2.drawOval(oval.info.getX(),oval.info.getY(),oval.info.getWidth(),oval.info.getHeight());
+						// creates point objects for the knobs
 						defineKnobs();
-						drawSquares(g2);
+						DOval oval = (DOval) shape;
+						
+						// creating the knobs as rectangle objects
+						createKnobs();
+						
+						// drawing the knobs
+						drawKnobs(g2);
 						
 						
 					}
-					else if (shape.getName().equals("DLine"))
+					else if ("DLine".equals(shape.getName()))
 					{
-						upperLeft = new Point(selected.info.getX(), selected.info.getY());
-						bottomLeft = new Point((int)selected.info.getBounds().getMaxX(), (int)selected.info.getBounds().getMaxY());
+						// creates point objects for the knobs
+						defineKnobs();
 						DLine line = (DLine) shape;
 						//g2.setColor(Color.CYAN);
-						//g2.drawRect(line.info.getX(),line.info.getY(),line.info.getWidth(),line.info.getHeight());
-						g2.setColor(Color.BLACK);
-						g2.fillRect(upperLeft.x-3, upperLeft.y-3, 9, 9);
-						g2.fillRect(bottomLeft.x-3, bottomLeft.y-3, 9, 9);	
+						//g2.drawRect(line.getBounds().x, line.getBounds().y, line.getBounds().width, line.getBounds().height);
+						
+						// creating the knobs as rectangle objects
+						createKnobs();
+						
+						// drawing the knobs
+						drawKnobs(g2);
 					}
 					
 					else if (shape.getName().equals("DText"))
 					{
+						// creates point objects for the knobs
+						defineKnobs();
 						DText text = (DText) shape;
-						g2.setColor(Color.CYAN);
-						g2.drawRect(text.info.getX(),text.info.getY(),text.info.getWidth(),text.info.getHeight());
-						drawSquares(g2);
+						
+						// creating the knobs as rectangle objects
+						createKnobs();
+						
+						// drawing the knobs
+						drawKnobs(g2);
 					} 
 					
 				}
@@ -206,190 +274,168 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseListener
 		} 
 	}
 
+	public void saveImage(File file)
+	{
+		BufferedImage image = (BufferedImage) createImage(this.getWidth(), this.getHeight());
+		Graphics g = image.getGraphics();
+		paintAll(g);
+		g.dispose();
+		try{
+			ImageIO.write(image, "png", file);
+		}
+		catch(IOException e){
+			e.printStackTrace();
+		}
+	}
+
+	public void addButton()
+	{
+		saveImage.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(selected != null)
+				{
+					selected = null;
+				}
+				String result = JOptionPane.showInputDialog("File Name", null);
+				if(result != null) {
+					File f = new File(result);
+					saveImage(f);
+					
+				}
+			}
+		});
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) 
+	{
+		movingPoint = e.getPoint();
+		int x = e.getX();
+		int y = e.getY();
+		if(selected != null)
+		{
+			if(ul == null || bl == null || ur == null || br == null)
+			{
+				return;
+			}
+			
+			if(selected.contains(e.getPoint()))
+			{
+				dragging = true;
+				draggingUl = false;
+				draggingBl = false;
+				draggingUr = false;
+				draggingBr = false;
+				offsetX = x - selected.info.x;
+				offsetY = y - selected.info.y;
+				System.out.println("Dragging...");
+			}
+			
+			else if(ul.contains(movingPoint))
+			{
+				draggingUl = true;
+				dragging = false;
+				draggingBl = false;
+				draggingUr = false;
+				draggingBr = false;
+				setAnchorPoint(br.getLocation());
+				System.out.println("upper left knob has been pressed. anchor point is " + anchorPoint);
+			}
+			
+			else if(bl.contains(movingPoint))
+			{
+				draggingBl = true;
+				dragging = false;
+				draggingUl = false;
+				draggingUr = false;
+				draggingBr = false;
+				setAnchorPoint(ur.getLocation());
+				System.out.println("bottom left knob has been pressed. anchor point is " + anchorPoint);
+			}
+			
+			else if(ur.contains(movingPoint))
+			{
+				draggingUr = true;
+				dragging = false;
+				draggingUl = false;
+				draggingBl = false;
+				draggingBr = false;
+				setAnchorPoint(bl.getLocation());
+				System.out.println("upper right knob has been pressed. anchor point is " + anchorPoint);
+			}
+			
+			else if(br.contains(movingPoint))
+			{
+				draggingBr = true;
+				dragging = false;
+				draggingUl = false;
+				draggingBl = false;
+				draggingUr = false;
+				setAnchorPoint(ul.getLocation());
+				System.out.println("bottom right knob has been pressed. anchor point is " + anchorPoint);
+			}
+			
+		}
+		
+		
+	}
+
 	@Override
 	public void mouseDragged(MouseEvent e) 
 	{
-		Point p = e.getPoint();
-		int dx = p.x - selected.info.getX();
-		int dy = p.y - selected.info.getY();
-		
-		if(selected.equals(rect))
+		p = e.getPoint();
+		if(selected == null)
 		{
-			if(dragging == true)
-			{
-				selected.info.setX(p.x - offsetX);
-				selected.info.setY(p.y - offsetY);
-			}
-			
-			else if(draggingUl == true)
-			{
-				int width = selected.info.getWidth() -dx;
-				int height = selected.info.getHeight() -dy;
-				if(ul.x - anchorPoint.x >= 0 || ul.y - anchorPoint.y >= 0)
-				{
-					
-					System.out.println("working");
-					//anchorPoint = br.getLocation();
-					//Point newAnchorPoint = br.getLocation();
-					//System.out.println("bottom Location" + anchorPoint);
-					
-					//selected.info.setBounds(selected.info.getX() + dx, selected.info.getY() + dy, Math.abs(e.getX()-newAnchorPoint.x), Math.abs(e.getY()-newAnchorPoint.y));
-				}
-				//int width = Math.abs(anchorPoint.x - movingPoint.x);
-				//int height = Math.abs(anchorPoint.y - movingPoint.y);
-				//selected.info.setBounds(selected.info.getX() + dx, selected.info.getY() + dy, width, height);
-				System.out.println(ul);
-				//selected.info.setBounds(selected.info.getX() + dx, selected.info.getY() + dy, Math.abs(e.getX()-anchorPoint.x), Math.abs(e.getY()-anchorPoint.y));
-				selected.info.setBounds(selected.info.getX() + dx, selected.info.getY() + dy, width, height);
-				
-
-				//System.out.println(ul);
-				
-				//selected.info.setBounds(, y, w, h);
-				
-				/*if(selected.info.width == 0 || selected.info.height == 0)
-				{
-					selected.info.setBounds(selected.info.x + dx, selected.info.y + dy, 10, 10);
-					
-				}*/
-				//selected.info.setBounds(movingPoint.x + dx, movingPoint.y + dy, selected.info.getWidth() -dx, selected.info.getHeight()-dy);
-				
-			}
-			
-			else if(draggingBl == true)
-			{
-			int width = selected.info.getWidth() - dx;
-			int height = dy;
-			selected.info.setBounds(selected.info.getX() + dx, selected.info.getY() , width, height);
-			
-			}
-			
-			else if(draggingUr == true)
-			{
-				int width = dx;
-				int height = selected.info.getHeight() -dy;
-				selected.info.setBounds(selected.info.getX(), selected.info.getY() + dy, width, height);
-			}
-			
-			else if(draggingBr == true)
-			{
-				int width = dx;
-				int height = dy;
-				selected.info.setBounds(selected.info.getX(), selected.info.getY(), width, height);
-			}
-		       
-		 }
-		
-			
-			
-		}
-
-
-		/*int x = e.getX();
-		int y = e.getY();
-		Point point = e.getPoint();
-		
-		if(selected != null)
-		{
-			if(selected.equals(rect))
-			{
-				//if(ul.contains(e.getPoint()) || bl.contains(e.getPoint()) || ur.contains(e.getPoint()) || br.contains(e.getPoint()))
-				{
-					selected.info.setBounds(selected.info.getX() + point.x -selected.info.getX() , y, selected.info.getWidth()-e.getX(), selected.info.getHeight()-e.getY());
-				}
-				if(selected.contains(e.getPoint())){
-				
-					//selected.info.setX(x - offsetX);
-					//selected.info.setY(y - offsetY);
-				}
-				
-		 			//selected.info.setWidth(selected.info.getWidth());
-		 			//selected.info.setHeight(selected.info.getHeight());
-		 			
-					
-		 			//selected.info.setWidth(y - anchorPoint.x - (movingPoint.x -e.getX()));
-		 			//selected.info.setHeight(x - anchorPoint.y - (movingPoint.y-e.getY()));
-				
-				
-			}
-			
-			
-			else if(selected.getName().equals("DOval"))
-			{
-				selected.info.setX(x - offsetX);
-				selected.info.setY(y - offsetY);
-			}
-			
-			else if(selected.getName().equals("DLine"))
-			{
-				selected.info.setX(x - offsetX);
-				selected.info.setY(y - offsetY);
-			}
-			
-			else if(selected.getName().equals("DText"))
-			{
-				selected.info.setX(x - offsetX);
-				selected.info.setY(y - offsetY);
-				setKnobs();
-			}
+			return;
 		}
 		
 		
+		else if(selected.equals(rect))
+		{
+			resize();
+		}
 		
-	}*/
-	
-	public void setKnobs()
-	{
-		getKnobs().get(0).setLocation(new Point(selected.getBounds().x-3, selected.getBounds().y-3));
-		getKnobs().get(1).setLocation(new Point(selected.getBounds().x-3, (int)selected.getBounds().getMaxY()-3));
-		getKnobs().get(2).setLocation(new Point((int)selected.getBounds().getMaxX()-3, selected.getBounds().y-3));
-		getKnobs().get(3).setLocation(new Point((int)selected.getBounds().getMaxX()-3, (int)selected.getBounds().getMaxY()-3));
+		else if(selected.equals(oval))
+		{
+			resize();
+		}
 		
-	}
-	
+		else if(selected.equals(text))
+		{
+			resize();
+		}
+		
+		else if(selected.equals(line))
+		{
+			resizeLine();
+			
+		}
+		
+		}
 
 	@Override
-	public void mouseMoved(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	public ArrayList<Point> getKnobs()
+	public void mouseClicked(MouseEvent e) 
 	{
-		return knobs;
-	}
-
-
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		 //super.mouseClicked(e);
-         System.out.println(e.getPoint());
+		System.out.println(e.getPoint());
          for (DShape d : shapesList)
          {
      		if (d.getName().equals("DRect"))
      	    {
-     	    	 rect = (DRect) d;
+     	    	rect = (DRect) d;
      	    	if (rect.contains(e.getPoint()))
      	    	{	
      	    		
      	    		selected = rect;
      	    		selectedModel = rect.info;
-     	    		ControlPanel.enableButtons();
-     	    		knobs.add(new Point(selected.getBounds().x-3, selected.getBounds().y-3));
-     	    		knobs.add(new Point(selected.getBounds().x-3, (int)selected.getBounds().getMaxY()-3));
-     	    		knobs.add(new Point((int)selected.getBounds().getMaxX()-3, selected.getBounds().y-3));
-     	    		knobs.add(new Point((int)selected.getBounds().getMaxX()-3, (int)selected.getBounds().getMaxY()-3));
+     	    		knobs.add(new Point(selected.getBounds().x-OFFSET, selected.getBounds().y-OFFSET));
+     	    		knobs.add(new Point(selected.getBounds().x-OFFSET, (int)selected.getBounds().getMaxY()-OFFSET));
+     	    		knobs.add(new Point((int)selected.getBounds().getMaxX()-OFFSET, selected.getBounds().y-OFFSET));
+     	    		knobs.add(new Point((int)selected.getBounds().getMaxX()-OFFSET, (int)selected.getBounds().getMaxY()-OFFSET));
      	    		System.out.println(selected.getName());
-     	    		System.out.println("Knobs are: " + getKnobs());
-     	    		System.out.println(selected.getBounds());
      	    		break;
      	    	}
      	    	
-     	    	/*if(ul.contains(e.getPoint()) || bl.contains(e.getPoint()) || ur.contains(e.getPoint()) || br.contains(e.getPoint()))
- 	    		{
- 	    			System.out.println(selected);
- 	    			System.out.println("pressing from knobs");
- 	    		}*/
      	    	else {
      	    		ControlPanel.disableButtons();
      	    		selected = null;
@@ -399,17 +445,16 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseListener
      	   	}
      	    else if (d.getName().equals("DOval"))
      	    {
-     	    	ControlPanel.enableButtons();
-     	    	DOval oval = (DOval) d;
+     	    	oval = (DOval) d;
      	    	if (oval.contains(e.getPoint()))
      	    	{
      	    		selected = oval;
      	    		selectedModel = oval.info;
-     	    		knobs.add(new Point(selected.getBounds().x-3, selected.getBounds().y-3));
-     	    		knobs.add(new Point(selected.getBounds().x-3, (int)selected.getBounds().getMaxY()-3));
-     	    		knobs.add(new Point((int)selected.getBounds().getMaxX()-3, selected.getBounds().y-3));
-     	    		knobs.add(new Point((int)selected.getBounds().getMaxX()-3, (int)selected.getBounds().getMaxY()-3));
-     	    		ControlPanel.enableButtons();
+     	    		knobs.add(new Point(selected.getBounds().x-OFFSET, selected.getBounds().y-OFFSET));
+     	    		knobs.add(new Point(selected.getBounds().x-OFFSET, (int)selected.getBounds().getMaxY()-OFFSET));
+     	    		knobs.add(new Point((int)selected.getBounds().getMaxX()-OFFSET, selected.getBounds().y-OFFSET));
+     	    		knobs.add(new Point((int)selected.getBounds().getMaxX()-OFFSET, (int)selected.getBounds().getMaxY()-OFFSET));
+     
      	    		System.out.println(selected.getName());
      	    		System.out.println("bounds for the selected oval " + selected.getBounds());
      	    		System.out.println(getKnobs());
@@ -424,17 +469,16 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseListener
      	  	}
      	    else if (d.getName().equals("DLine"))
      	    {	  
-     	    	ControlPanel.enableButtons();
-     	    	DLine line = (DLine) d;
+     	    	
+     	    	line = (DLine) d;
      	    	if (line.contains(e.getPoint()))
      	    	{	        
      	    		
      	    		selected = line;
      	    		selectedModel = line.info;
-     	    		knobs.add(new Point(selected.getBounds().x-3, selected.getBounds().y-3));
-     	    		knobs.add(new Point((int)selected.getBounds().getMaxX()-3, (int)selected.getBounds().getMaxY()-3));
+     	    		knobs.add(new Point(selected.getBounds().x-OFFSET, selected.getBounds().y-OFFSET));
+     	    		knobs.add(new Point((int)selected.getBounds().getMaxX()-OFFSET, (int)selected.getBounds().getMaxY()-OFFSET));
      	    		System.out.println("Knobs are at: " + getKnobs());
-     	    		ControlPanel.enableButtons();
      	    		System.out.println(selected.getName());
      	    		break;
      	    	}
@@ -448,17 +492,16 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseListener
      	  	}
      	    else if (d.getName().equals("DText"))
      	    {	        
-     	    	ControlPanel.enableButtons();
-     	    	DText text = (DText) d;
+     	    	text = (DText) d;
      	    	if (text.contains(e.getPoint()))
      	    	{	        
+     	    		ControlPanel.enableButtons();
      	    		selected = text;
      	    		selectedModel = text.info;
-     	    		knobs.add(new Point(selected.getBounds().x-3, selected.getBounds().y-3));
-     	    		knobs.add(new Point(selected.getBounds().x-3, (int)selected.getBounds().getMaxY()-3));
-     	    		knobs.add(new Point((int)selected.getBounds().getMaxX()-3, selected.getBounds().y-3));
-     	    		knobs.add(new Point((int)selected.getBounds().getMaxX()-3, (int)selected.getBounds().getMaxY()-3));
-     	    		ControlPanel.enableButtons();
+     	    		knobs.add(new Point(selected.getBounds().x-OFFSET, selected.getBounds().y-OFFSET));
+     	    		knobs.add(new Point(selected.getBounds().x-OFFSET, (int)selected.getBounds().getMaxY()-OFFSET));
+     	    		knobs.add(new Point((int)selected.getBounds().getMaxX()-OFFSET, selected.getBounds().y-OFFSET));
+     	    		knobs.add(new Point((int)selected.getBounds().getMaxX()-OFFSET, (int)selected.getBounds().getMaxY()-OFFSET));
      	    		System.out.println(selected.getName());
      	    		break;
      	    	}
@@ -477,6 +520,16 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseListener
 
 
 	@Override
+	public void mouseReleased(MouseEvent e) {
+		movingPoint = null;
+		draggingUl = false;
+		draggingBl =false;
+		draggingUr = false;
+		draggingBr = false;
+		
+	}
+
+	@Override
 	public void mouseEntered(MouseEvent e) {
 		// TODO Auto-generated method stub
 		
@@ -491,110 +544,159 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseListener
 
 	
 	@Override
-	public void mousePressed(MouseEvent e) 
-	{
-		movingPoint = e.getPoint();
-		int x = e.getX();
-		int y = e.getY();
+	public void mouseMoved(MouseEvent e) {
+		// TODO Auto-generated method stub
 		
-		if(selected != null)
+	}
+	
+	private void resize()
+	{
+		p = getPoint();
+		int dx = p.x - selected.info.getX();
+		int dy = p.y - selected.info.getY();
+		
+		if(dragging == true)
 		{
-			if(ul.contains(movingPoint))
+			selected.info.setX(p.x - offsetX);
+			selected.info.setY(p.y - offsetY);
+		}
+		
+		else if(draggingUl == true)
+		{
+			int width = selected.info.getWidth() - dx;
+			int height = selected.info.getHeight() - dy;
+			
+			if(ul.x - anchorPoint.x >= 0)
 			{
-				anchorPoint = br.getLocation();
-				System.out.println("upper left knob has been pressed. anchor point is " + anchorPoint);
+				draggingUl = false;
+				draggingUr = true;
 			}
 			
-			if(selected.contains(e.getPoint()))
+			else if(ul.y - anchorPoint.y >= 0)
 			{
-				dragging = true;
-				draggingUl =false;
+				draggingUl = false;
+				draggingBl = true;
+				width = selected.info.getWidth() - dx;
+				height = dy;
+				selected.info.setBounds(selected.info.getX() + dx, selected.info.getY() , width, height);
+			}
+			else
+			selected.info.setBounds(selected.info.getX() + dx, selected.info.getY() + dy, width, height);
+			System.out.println(selected.getBounds());
+		
+		}
+		
+		else if(draggingBl == true)
+		{
+			int width = selected.info.getWidth() - dx;
+			int height = dy;
+			selected.info.setBounds(selected.info.getX() + dx, selected.info.getY() , width, height);
+			
+			if(bl.x - anchorPoint.x >= 0)
+			{
+				System.out.println("working");
 				draggingBl = false;
-				draggingUr = false;
-				draggingBr = false;
-				offsetX = x - selected.info.x;
-				offsetY = y - selected.info.y;
+				draggingBr = true;
 			}
 			
-			if(bl.contains(e.getPoint()))
+			else if(bl.y - anchorPoint.y <= 0)
 			{
-				dragging = false;
+				System.out.println("working");
+				draggingBl = false;
+				draggingUl = true;
+				
+				int width1 = selected.info.getWidth() - dx;
+				int height1 = selected.info.getHeight() - dy;
+				selected.info.setBounds(selected.info.getX() + dx, selected.info.getY() + dy, width1, height1);
+				System.out.println("is ul dragging?" + draggingUl);
+				
+			}
+				
+		
+		}
+		
+		else if(draggingUr == true)
+		{
+			int width = dx;
+			int height = selected.info.getHeight() - dy;
+			selected.info.setBounds(selected.info.getX(), selected.info.getY() + dy, width, height);
+			System.out.println(selected.getBounds());
+			
+			if(ur.x - anchorPoint.x <= 0)
+			{
+				int width1 = selected.info.getWidth() - dx;
+				int height1 = selected.info.getHeight() - dy;
+				draggingUr = false;
+				draggingUl = true;
+				selected.info.setBounds(selected.info.getX() + dx, selected.info.getY() + dy, width1, height1);
+				System.out.println(" is ur dragging?" + draggingUr);
+				System.out.println("is ul dragging?" + draggingUl);
+			}
+			
+			else if(ur.y - anchorPoint.y >= 0)
+			{
+				draggingUr = false;
+				draggingBr = true;
+			}
+			
+		}
+		
+		else if(draggingBr == true)
+		{
+			int width = dx;
+			int height = dy;
+			selected.info.setBounds(selected.info.getX(), selected.info.getY(), width, height);
+			
+			if(br.x - anchorPoint.x <= 0)
+			{
+				draggingBr = false;
 				draggingBl = true;
 			}
-			 
-		  else if(ul.contains(e.getPoint())) 
-	    		{
-					dragging = false;
-					draggingUl = true;
-	    		}
-		  else if(ur.contains(e.getPoint()))
-		  {
-			  dragging = false;
-			  draggingUr = true;
-		  }
-		  else if(br.contains(e.getPoint()))
-		  {
-			  dragging = false;
-			  draggingBr = true;
-		  }
 			
-		}
-		
-		
-	}
-	
-	private void drawSquares(Graphics2D g2)
-	{
-		
-		
-		g2.setColor(Color.BLACK);
-		g2.fillRect(upperLeft.x-3, upperLeft.y-3, 9, 9);
-		g2.fillRect(bottomLeft.x-3, bottomLeft.y-3, 9, 9);
-		g2.fillRect(upperRight.x-3, upperRight.y-3, 9, 9);
-		g2.fillRect(bottomRight.x-3, bottomRight.y-3, 9, 9);
-	}
-
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		movingPoint = null;
-		//draggingUl = false;
-		draggingBl =false;
-		draggingUr = false;
-		draggingBr = false;
-		
-	}
-	
-	public void saveImage(File file)
-	{
-		BufferedImage image = (BufferedImage) createImage(this.getWidth(), this.getHeight());
-		Graphics g = image.getGraphics();
-		paintAll(g);
-		g.dispose();
-		try{
-			ImageIO.write(image, "png", file);
-		}
-		catch(IOException e){
-			e.printStackTrace();
-		}
-	}
-	
-	public void addButton()
-	{
-		saveImage.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(selected != null)
-				{
-					selected = null;
-				}
-				String result = JOptionPane.showInputDialog("File Name", null);
-				if(result != null) {
-					File f = new File(result);
-					saveImage(f);
-					
-				}
+			else if(br.y - anchorPoint.y <= 0)
+			{
+				draggingBr = false;
+				draggingUr = true;
+				width = dx;
+				height = selected.info.getHeight() - dy;
+				selected.info.setBounds(selected.info.getX(), selected.info.getY() + dy, width, height);
+				
 			}
-		});
+		}
 		
+	}
+	
+	
+	private Point getPoint()
+	{
+		return this.p;
+	}
+	
+	private void resizeLine()
+	{
+		p = getPoint();
+		int dx = p.x - selected.info.getX();
+		int dy = p.y - selected.info.getY();
+		
+		if(dragging == true)
+		{
+			selected.info.setX(p.x - offsetX);
+			selected.info.setY(p.y - offsetY);
+		}
+		
+		else if(draggingUl == true)
+		{
+			int width = selected.info.getWidth() - dx;
+			int height = selected.info.getHeight() - dy;
+			selected.info.setBounds(selected.info.getX() + dx, selected.info.getY() + dy, width, height);
+		
+		}
+		
+		else if(draggingBr == true)
+		{
+			int width = dx;
+			int height = dy;
+			selected.info.setBounds(selected.info.getX(), selected.info.getY(), width, height);
+		}
 	}
 }

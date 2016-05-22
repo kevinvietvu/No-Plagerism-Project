@@ -40,6 +40,11 @@ public class DShape implements ModelListener {
 	{
 		return "DShape";
 	}
+	
+	public int getWidth()
+	{
+		return info.getWidth();
+	}
 
 	@Override
 	public void modelChanged(DShapeModel model) {

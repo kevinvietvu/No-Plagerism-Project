@@ -14,11 +14,10 @@ public class DRect extends DShape {
         g.fillRect(info.getX(),info.getY(),info.getWidth(),info.getHeight());
 	}
 	
-	
-	
 	public String getName()
 	{
 		return "DRect";
 	}
+	
 	
 }	

@@ -36,7 +36,6 @@ public class ControlPanel extends JPanel {
 	{
 		super();
 		this.addButtons();
-		//view = new Canvas();
 	}
 	
 	
@@ -101,7 +100,7 @@ public class ControlPanel extends JPanel {
 			/*	int random3 = (int )(Math.random() * 100 + 5);
 				int random4 = (int )(Math.random() * 100 + 5);		
 				DTextModel bounds = new DTextModel(random, random2, random3, random4);	 */
-				DTextModel bounds = new DTextModel(random,random2,200,100,"Hello","Dialog.plain"); 
+				DTextModel bounds = new DTextModel(random,random2,200,100,"hello","Dialog.plain"); 
 				Canvas.addShape(bounds);
 			}
 		});
