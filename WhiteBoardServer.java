@@ -38,7 +38,6 @@ public class WhiteBoardServer extends Thread {
 			JOptionPane.showMessageDialog(null, "Could not listen on port: " + port, "Error", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
-		
 	}
 	
 	public WhiteBoardServer() 
@@ -56,6 +55,14 @@ public class WhiteBoardServer extends Thread {
 		
 	}
 	
+	/**
+	 * Returns server socket 
+	 * @return serverSocket
+	 */
+	public static ServerSocket getServerSocket() {
+		return serverSocket;
+	}
+
 	//runs as a separate thread to accept incoming clients
 	public void run() 
 	{

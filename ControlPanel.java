@@ -340,10 +340,15 @@ public class ControlPanel extends JPanel
 					JOptionPane.showMessageDialog(null, "Can't change from server mode to client mode. Restart the program.", "Error", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
-				if (getStatus().getText().equals("Client mode"))
+				else if (getStatus().getText().equals("Client mode"))
 				{
 					JOptionPane.showMessageDialog(null, "Whiteboard already in client mode." , "Error", JOptionPane.ERROR_MESSAGE);
 					return;
+				}
+				else if (WhiteBoardServer.getServerSocket() == null)
+				{
+					 JOptionPane.showMessageDialog(null, "There is no whiteboard server" , "Error", JOptionPane.ERROR_MESSAGE);
+					 return;
 				}
 				else
 				{
@@ -361,6 +366,7 @@ public class ControlPanel extends JPanel
 						disableAllButtons();
 						WhiteBoardClient client = new WhiteBoardClient(canvas,parts[0].trim(), port);
 						client.start();
+						
 					}
 					catch (Exception e1) //ArrayIndexOutOfBounds and IllegalArgumentException
 					{
