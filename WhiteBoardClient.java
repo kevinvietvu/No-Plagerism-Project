@@ -37,8 +37,9 @@ class WhiteBoardClient extends Thread {
 			// get input stream to read from server and wrap in object input
 			// stream
 			ObjectInputStream in = new ObjectInputStream(toServer.getInputStream());
+			canvas.getControlPanel().disableAllButtons();
 			System.out.println("client: connected on port " + port);
-
+			
 			while (true) {
 				// Get the xml string, decode to a DShapeModel object.
 				// Blocks in readObject(), waiting for server to send something.

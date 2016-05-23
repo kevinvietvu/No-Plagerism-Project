@@ -19,7 +19,6 @@ public class WhiteBoardServer extends Thread {
 	private static ArrayList<ObjectOutputStream> clientStreams = new ArrayList<>();
 	private static Socket clientSocket = null;
 	
-
     /**
      * Makes new Server for a whiteboard
      * @param port 

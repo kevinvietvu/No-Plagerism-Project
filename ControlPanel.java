@@ -279,8 +279,8 @@ public class ControlPanel extends JPanel
             		}
     				if(canvas.getSelected() != null)
     				{
-    					DShape selected = canvas.getSelected();
-    					selected = null;
+    					canvas.setSelected(null);
+    					canvas.setSelectedModel(null);
     				}
     				String result = JOptionPane.showInputDialog("File Name", null);
     				if(result != null) 
@@ -345,11 +345,6 @@ public class ControlPanel extends JPanel
 					JOptionPane.showMessageDialog(null, "Whiteboard already in client mode." , "Error", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
-				else if (WhiteBoardServer.getServerSocket() == null)
-				{
-					 JOptionPane.showMessageDialog(null, "There is no whiteboard server" , "Error", JOptionPane.ERROR_MESSAGE);
-					 return;
-				}
 				else
 				{
 					String result = JOptionPane.showInputDialog("Connect to host:port", "127.0.0.1:11584");
@@ -363,7 +358,6 @@ public class ControlPanel extends JPanel
 						}
 						getStatus().setText("Client mode");
 						canvas.clear();
-						disableAllButtons();
 						WhiteBoardClient client = new WhiteBoardClient(canvas,parts[0].trim(), port);
 						client.start();
 						

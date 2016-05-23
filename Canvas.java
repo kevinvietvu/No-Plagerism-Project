@@ -13,7 +13,6 @@ public class Canvas extends JPanel  implements MouseMotionListener, MouseListene
 {
 	private Whiteboard board;
 	private ControlPanel controls;
-	private double previousFontSize;
 	private DShape selected;
 	private DShapeModel selectedModel;
 	private ArrayList<DShape> shapesList;
@@ -847,5 +846,14 @@ public class Canvas extends JPanel  implements MouseMotionListener, MouseListene
 		// TODO Auto-generated method stub
 		return tableModel;
 	}
+
+	public void setSelected(DShape object) {
+		this.selected = object;
+	}
+
+	public void setSelectedModel(DShapeModel selectedModel) {
+		this.selectedModel = selectedModel;
+	}
+	
 
 }
