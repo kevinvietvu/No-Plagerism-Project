@@ -131,17 +131,17 @@ public class ControlPanel extends JPanel
 		{
 			Color initialcolor = Color.GRAY;
 			Color newColor = JColorChooser.showDialog(setColor, "Select a color", initialcolor);
-			if (canvas.selectedModel == null)
+			if (canvas.getSelectedModel() == null)
 			{
 				return;
 			}
-			for (DShapeModel d : canvas.selectedModel.getListeners())
+			for (DShapeModel d : canvas.getSelectedModel().getListeners())
 			{
-				if (canvas.selectedModel.equals(d))
+				if (canvas.getSelectedModel().equals(d))
 				{
-					canvas.selectedModel.setColor(newColor);
-					canvas.selected.modelChanged(canvas.selectedModel);
-					xmlModel = WhiteBoardServer.ObjectToXML(canvas.selected.info);
+					canvas.getSelectedModel().setColor(newColor);
+					canvas.getSelected().modelChanged(canvas.getSelectedModel());
+					xmlModel = WhiteBoardServer.ObjectToXML(canvas.getSelected().info);
 					WhiteBoardServer.send("change",xmlModel);
 				}	
 				repaint();
@@ -155,12 +155,12 @@ public class ControlPanel extends JPanel
 			public void actionPerformed(ActionEvent e) 
 			{
 
-				if (canvas.selected != null && !canvas.getShapesList().isEmpty())
+				if (canvas.getSelected() != null && !canvas.getShapesList().isEmpty())
 				{
-					xmlModel = WhiteBoardServer.ObjectToXML(canvas.selectedModel);
+					xmlModel = WhiteBoardServer.ObjectToXML(canvas.getSelectedModel());
 					WhiteBoardServer.send("moveFront",xmlModel);
-					canvas.getShapesList().remove(canvas.getShapesList().indexOf(canvas.selected));
-					canvas.getShapesList().add(canvas.selected);
+					canvas.getShapesList().remove(canvas.getShapesList().indexOf(canvas.getSelected()));
+					canvas.getShapesList().add(canvas.getSelected());
 				}
 			
 			}
@@ -172,12 +172,12 @@ public class ControlPanel extends JPanel
 			public void actionPerformed(ActionEvent e) 
 			{
 		
-				if (canvas.selected != null && !canvas.getShapesList().isEmpty())
+				if (canvas.getSelected() != null && !canvas.getShapesList().isEmpty())
 				{
-					xmlModel = WhiteBoardServer.ObjectToXML(canvas.selectedModel);
+					xmlModel = WhiteBoardServer.ObjectToXML(canvas.getSelectedModel());
 					WhiteBoardServer.send("moveBack",xmlModel);
-					canvas.getShapesList().remove(canvas.getShapesList().indexOf(canvas.selected));
-					canvas.getShapesList().add(0,canvas.selected);
+					canvas.getShapesList().remove(canvas.getShapesList().indexOf(canvas.getSelected()));
+					canvas.getShapesList().add(0,canvas.getSelected());
 					
 				}
 			
@@ -189,14 +189,14 @@ public class ControlPanel extends JPanel
 		{
 			public void actionPerformed(ActionEvent e) 
 			{
-				if (canvas.selected != null) 
+				if (canvas.getSelected() != null) 
 				{
-					if (canvas.getShapesList().contains(canvas.selected)) 
+					if (canvas.getShapesList().contains(canvas.getSelected())) 
 					{
-						xmlModel = WhiteBoardServer.ObjectToXML(canvas.selectedModel);
+						xmlModel = WhiteBoardServer.ObjectToXML(canvas.getSelectedModel());
 						WhiteBoardServer.send("remove",xmlModel);
-						canvas.selectedModel.getListeners().remove(canvas.selectedModel);
-						canvas.getShapesList().remove(canvas.selected);
+						canvas.getSelectedModel().getListeners().remove(canvas.getSelectedModel());
+						canvas.getShapesList().remove(canvas.getSelected());
 						canvas.getTableModel().fireTableDataChanged();
 						repaint();			
 					}
@@ -218,6 +218,8 @@ public class ControlPanel extends JPanel
                         DShape[] shapeArray = (DShape[]) xmlIn.readObject();
                         xmlIn.close();
                         canvas.clear();
+                        xmlModel = WhiteBoardServer.ObjectToXML(canvas.getSelectedModel());
+                        WhiteBoardServer.send("clear", xmlModel);
                         for(DShape shape : shapeArray) 
                         {
                         	canvas.getShapesList().add(shape);
@@ -263,9 +265,10 @@ public class ControlPanel extends JPanel
         {
             public void actionPerformed(ActionEvent e) 
             {
-    				if(canvas.selected != null)
+    				if(canvas.getSelected() != null)
     				{
-    					canvas.selected = null;
+    					DShape selected = canvas.getSelected();
+    					selected = null;
     				}
     				String result = JOptionPane.showInputDialog("File Name", null);
     				if(result != null) 

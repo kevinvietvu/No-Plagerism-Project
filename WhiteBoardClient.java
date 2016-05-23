@@ -9,9 +9,8 @@ class WhiteBoardClient extends Thread {
 	private String name;
 	private int port;
 	private final String DEFAULT_HOST_NAME = "127.0.0.1";
-	private static DShapeModel model;
 	private Canvas canvas;
-	private Thread client;
+
 
 	/**
 	 * Makes new client for a whiteboard
@@ -47,7 +46,7 @@ class WhiteBoardClient extends Thread {
 				String xmlString = (String) in.readObject();
 				@SuppressWarnings("resource")
 				XMLDecoder decoder = new XMLDecoder(new ByteArrayInputStream(xmlString.getBytes()));
-				model = (DShapeModel) decoder.readObject();
+				DShapeModel model = (DShapeModel) decoder.readObject();
 				decoder.close();
 				if (verb.equals("add")) {
 					canvas.addShape(model);
@@ -59,13 +58,14 @@ class WhiteBoardClient extends Thread {
 					canvas.moveBack(model);
 				} else if (verb.equals("change")) {
 					canvas.change(model);
+				} else if (verb.equals("clear")) {
+					canvas.clear();
 				}
 			}
 		} catch (Exception e) { // IOException and ClassNotFoundException
-			canvas.controls.getStatus().setText("N/A");
+			canvas.getControlPanel().getStatus().setText("N/A");
 			JOptionPane.showMessageDialog(null, "Connection refused", "Error", JOptionPane.ERROR_MESSAGE);
 			
 		}
 	}
-
 }

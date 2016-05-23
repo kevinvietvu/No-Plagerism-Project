@@ -11,20 +11,20 @@ import javax.swing.*;
 
 public class Canvas extends JPanel  implements MouseMotionListener, MouseListener 
 {
-	public Whiteboard board;
-	public ControlPanel controls;
-	public double previousFontSize;
-	public DShape selected;
-	public DShapeModel selectedModel;
+	private Whiteboard board;
+	private ControlPanel controls;
+	private double previousFontSize;
+	private DShape selected;
+	private DShapeModel selectedModel;
 	private ArrayList<DShape> shapesList;
 	private ArrayList<Point> knobs;
 	int offsetX, offsetY;
-	public Point upperLeft, bottomLeft, upperRight, bottomRight;
-	public Rectangle ul, bl, ur,br;
+	private Point upperLeft, bottomLeft, upperRight, bottomRight;
+	private Rectangle ul, bl, ur,br;
 	private Point movingPoint;
 	private Point anchorPoint;
 	boolean dragging, draggingUl, draggingBl, draggingUr, draggingBr;
-	public Point p;
+	private Point p;
 	private static final int KNOB_SIZE = 9;
 	private static final int OFFSET = 3;
 	private TableModel tableModel;
@@ -51,6 +51,21 @@ public class Canvas extends JPanel  implements MouseMotionListener, MouseListene
 	public void setWhiteboard(Whiteboard board) 
 	{
 		this.board = board;
+	}
+	
+	public ControlPanel getControlPanel()
+	{
+		return controls;
+	}
+	
+	public DShape getSelected()
+	{
+		return selected;
+	}
+	
+	public DShapeModel getSelectedModel()
+	{
+		return selectedModel;
 	}
 	
 	/**

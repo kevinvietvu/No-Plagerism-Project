@@ -43,8 +43,6 @@ public class Whiteboard extends JFrame {
 		
 		Whiteboard wb3 = new Whiteboard();
 
-
-
 	}
 
 	public static WhiteBoardServer getServer() {
