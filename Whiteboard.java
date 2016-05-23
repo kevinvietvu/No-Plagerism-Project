@@ -1,43 +1,51 @@
 import java.awt.*;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+import java.util.Vector;
 
 import javax.swing.*;
 
 public class Whiteboard extends JFrame {
-	private JFrame frame; 
-	String title;
+	public String title;
+	public static WhiteBoardServer server;
+	public Canvas canvasBoard;
 	
-	public Whiteboard(String title)
-	{
-		this.title = title;
-	}
-	
+	/**
+	 * Makes a new whiteboard
+	 */
 	public Whiteboard()
 	{
 		title = "Whiteboard";
-	}
-	
-	
-	public void run()
-	{
-	    frame = new JFrame(title);
+		JFrame  frame = new JFrame(title);
 	    frame.setLayout(new BorderLayout());
 	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    
-	    Canvas board = new Canvas();
-	    frame.add(board, BorderLayout.CENTER);
+	    canvasBoard = new Canvas(this);
+	    frame.add(canvasBoard, BorderLayout.CENTER);
 	    
-	    ControlPanel controls = new ControlPanel();
+	    ControlPanel controls = new ControlPanel(canvasBoard);
 	    controls.setLayout(new BoxLayout(controls, BoxLayout.Y_AXIS));
+	    
+	    canvasBoard.setControlPanel(controls);
 	    
 	    frame.add(controls,BorderLayout.WEST);
 
 	    frame.pack();
 	    frame.setVisible(true);
-	
 	}
+	
 	public static void main(String args[])
 	{
 		Whiteboard wb = new Whiteboard();
-		wb.run();
+	
+		Whiteboard wb2 = new Whiteboard();
+		
+		Whiteboard wb3 = new Whiteboard();
+
+
+
 	}
+
+	
 }

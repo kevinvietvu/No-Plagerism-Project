@@ -1,38 +1,51 @@
 import java.awt.*;
 
-public class DText extends DShape {
+public class DText extends DShape 
+{
     double fontSize = 1.0;
     Font selectedFont;
     FontMetrics metrics;
     int fontHeight;
-    int fontDescent;
+    int fontAscent;
     String textLine;
     
+    /**
+     * calls the superclass constructor
+     */
 	public DText()
 	{
 		super();
 	}
-	
+
+	/**
+	 * computes the font size based on the bounds of
+	 * the rectangle
+	 * @param g
+	 * @return
+	 */
 	public Font computeFont(Graphics g)
 	{
-		
 		double fontSize = 1.0;
+		double previousFontSize = 1.0;
 		selectedFont = new Font(((DTextModel) info).getFontType(), Font.PLAIN, (int) fontSize);
 		FontMetrics metrics = new FontMetrics(selectedFont) {};
 		while (metrics.getHeight() <= info.getHeight() )
 		{	
+			previousFontSize = fontSize;
 			fontSize = (fontSize * 1.10) + 1;
 			Font biggerFont = selectedFont.deriveFont((float)fontSize);
 			metrics = new FontMetrics(biggerFont) {};
+			fontAscent = metrics.getAscent();
 		}
-		return selectedFont.deriveFont((float)fontSize);
-	}
+		return selectedFont.deriveFont((float)previousFontSize);
+	} 
 	
-	//RenderingHints makes the text smoother and less edgy I think...
+	/**
+	 * draws the text in a box
+	 */
 	public void draw(Graphics g)
 	{	
-		
-		
+		//Rendering makes the font edges look less fuzzy or edgy
 		RenderingHints rh = new RenderingHints(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
 
 	    rh.put(RenderingHints.KEY_RENDERING,RenderingHints.VALUE_RENDER_QUALITY);
@@ -40,37 +53,29 @@ public class DText extends DShape {
 	    ((Graphics2D) g).setRenderingHints(rh);
 
 	    Font f = computeFont(g);
-	    
-	    //selectedFont = new Font(((DTextModel) info).getFontType(), Font.PLAIN, (int) fontSize);
 		
 	    g.setFont(f);
 	           
-	    g.setColor(info.getC());
-	    
-	    //place holder box drawn to see if the text fits inside the box
-	    g.drawRect(info.getX(), info.getY(),info.getWidth(),info.getHeight());
+	    g.setColor(info.getColor());
 	    
 	    Shape clip = g.getClip();
 	    
 	    //Clips the width of the text within the box
 	    g.setClip(clip.getBounds().createIntersection(getBounds()));
 	    
-	    g.drawString(((DTextModel) info).getText(), info.getX() , info.getY() + info.getHeight());
+	    g.drawString(((DTextModel) info).getText(), info.getX() , info.getY() + info.getHeight() - fontAscent / 5 );
 	    
 	    //Restore old clip
 	    g.setClip(clip);
-	    
-	}
-	
+
+	} 
+	   
+	/**
+	 * gets the name
+	 */
 	public String getName()
 	{
 		return "DText";
-	}
-	
-	public String getFontType()
-	{
-		DTextModel info = new DTextModel();
-		return info.getFontType();
 	}
 	
 }

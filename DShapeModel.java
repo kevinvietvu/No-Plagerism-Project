@@ -6,100 +6,196 @@ public class DShapeModel {
 	public int y;
 	public int width;
 	public int height;
-	public Color c;
-	public static ArrayList<DShapeModel> listeners = new ArrayList<>();
+	public Color color;
+	public ArrayList<DShapeModel> listeners;
+	public int id;
 	
-	public DShapeModel()
+	public DShapeModel() 
 	{
-		x = 10;
-		y = 10;
-		width = 10;
-		height = 10;
-		c = Color.GRAY;
+			
 	}
 	
-	public DShapeModel(int x, int y,int w, int h)
+	/**
+	 * creates a new DShapeModel with given parameters
+	 * @param x
+	 * @param y
+	 * @param width
+	 * @param height
+	 */
+	public DShapeModel(int x, int y,int width, int height)
 	{
+		listeners = new ArrayList<>();
 		this.x = x;
 		this.y = y;
-	    width = w;
-	    height = h;
-	    this.c = Color.GRAY;
+	    this.width = width;
+	    this.height = height;
+	    this.color = Color.GRAY;
+	    this.id = 1;
 	}
 	
+	/**
+	 * returns the listeners
+	 * @return
+	 */
+	public ArrayList<DShapeModel> getListeners() 
+	{
+		return listeners;
+	}
+
+	/**
+	 * sets the listeners
+	 * @param listeners
+	 */
+	public void setListeners(ArrayList<DShapeModel> listeners) 
+	{
+		this.listeners = listeners;
+	}
+
+	/**
+	 * gets the x, y, width, height of rectangle
+	 * @return
+	 */
 	public Rectangle getBounds()
 	{
 		return new Rectangle(this.x,this.y,this.width,this.height);
 	}
 	
-	public void setBounds(int x, int y, int w, int h)
-	{
-		this.x = x;
-		this.y = y;
-		this.width = w;
-		this.height =h;
-	}
-	
-	public void resize(int w, int h)
-	{
-		this.width = w;
-		this.height = h;
-		
-	}
-	
-	public void setLocation(Point p)
-	{
-		this.x = p.x;
-		this.y = p.y;
-	}
-	
+	/**
+	 * checks to see if the model are equal
+	 * @param d
+	 * @return
+	 */
 	public boolean equals(DShapeModel d)
 	{
-		if (d.getX() == this.x && d.getY() == this.y && d.getWidth() == this.width && d.getHeight() == this.height && d.getC() == this.c)
+		if (d.getX() == this.x && d.getY() == this.y && d.getWidth() == this.width && d.getHeight() == this.height && d.getColor().equals(this.color) && d.getId() == this.id)
 		{
 			return true;
 		}
 		return false;
 	}
 	
-	public int getX() {
+	/**
+	 * sets the x, y , h, w 
+	 * @param x
+	 * @param y
+	 * @param w
+	 * @param h
+	 */
+	public void setBounds(int x, int y, int w, int h)
+	{
+		this.x = x;
+		this.y = y;
+		this.width = w;
+		this.height = h;
+	}
+	
+	/**
+	 * returns the x value
+	 * @return
+	 */
+	public int getX() 
+	{
 		return x;
 	}
 
-	public void setX(int x) {
+	/**
+	 * sets the x value with a given int
+	 * @param x
+	 */
+	public void setX(int x) 
+	{
 		this.x = x;
 	}
 
-	public int getY() {
+	/**
+	 * gets the y value with a given int
+	 * @return
+	 */
+	public int getY() 
+	{
 		return y;
 	}
 
-	public void setY(int y) {
+	/**
+	 * sets the y value with a given int
+	 * @param y
+	 */
+	public void setY(int y) 
+	{
 		this.y = y;
 	}
 
-	public int getWidth() {
+	/**
+	 * gets the width value
+	 * @return
+	 */
+	public int getWidth() 
+	{
 		return width;
 	}
 
-	public void setWidth(int width) {
+	/**
+	 * sets the width value
+	 * @param width
+	 */
+	public void setWidth(int width) 
+	{
 		this.width = width;
 	}
 
-	public int getHeight() {
+	/**
+	 * returns the height
+	 * @return
+	 */
+	public int getHeight() 
+	{
 		return height;
 	}
 
-	public void setHeight(int height) {
+	/**
+	 * sets the height
+	 * @param height
+	 */
+	public void setHeight(int height) 
+	{
 		this.height = height;
 	}
 
-	public Color getC() {
-		return c;
+	/**
+	 * gets the color
+	 * @return
+	 */
+	public Color getColor() 
+	{
+		return color;
 	}
 
-	public void setC(Color c) {
-		this.c = c;
+	/**
+	 * sets the color
+	 * @param c
+	 */
+	public void setColor(Color c) 
+	{
+		this.color = c;
 	}
+
+	/**
+	 * returns the id
+	 * @return
+	 */
+	public int getId() 
+	{
+		return id;
+	}
+
+	/**
+	 * sets the id
+	 * @param id
+	 */
+	public void setId(int id) 
+	{
+		this.id = id;
+	}
+	
 	
 }

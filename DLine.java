@@ -1,27 +1,35 @@
 import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.geom.*;
-import java.util.ArrayList;
 
-public class DLine extends DShape {
-	private static final int HIT_BOX_SIZE = 4;
+import java.awt.Graphics2D;
+import java.awt.geom.*;
+
+public class DLine extends DShape 
+{
+	private static final int HIT_BOX_SIZE = 3;
 	Line2D.Double line = new Line2D.Double();
 	
+	/**
+	 * calls the superclass constructor
+	 */
 	public DLine()
 	{
 		super();
 	}
 	
+	/**
+	 * draws the line
+	 */
 	public void draw(Graphics g)
 	{	
 		Graphics2D g2 = (Graphics2D)g;
-		g2.setColor(info.getC());
+		g2.setColor(info.getColor());
 		line.setLine(info.getX(), info.getY(), info.getWidth() + info.getX(), info.getHeight() + info.getY());
         g2.draw(line);
 	}
 	
-	
+	/**
+	 * checks to see if a point is in the line
+	 */
 	public boolean contains(Point2D p)
 	{
 		int rectangleX = (int) p.getX() - HIT_BOX_SIZE / 2;
@@ -33,10 +41,12 @@ public class DLine extends DShape {
 		
 	}
 	
+	/**
+	 * returns a the name
+	 */
 	public String getName()
 	{
 		return "DLine";
 	}
-	
 	
 }

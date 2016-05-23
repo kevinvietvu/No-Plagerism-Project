@@ -10,14 +10,15 @@ public class DRect extends DShape {
 	
 	public void draw(Graphics g)
 	{	
-		g.setColor(info.getC());
+		g.setColor(info.getColor());
         g.fillRect(info.getX(),info.getY(),info.getWidth(),info.getHeight());
 	}
+	
+	
 	
 	public String getName()
 	{
 		return "DRect";
 	}
-	
 	
 }	

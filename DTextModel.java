@@ -1,6 +1,10 @@
 public class DTextModel extends DShapeModel {
-	String text;
-    String fontType;
+	private String text;
+    private String fontType;
+    
+    public DTextModel() {
+    	
+    }
     
 	public DTextModel(int x , int y, int width, int height, String text,String fontType)
 	{
@@ -8,14 +12,7 @@ public class DTextModel extends DShapeModel {
 		this.text = text;
 		this.fontType = fontType;
 	}
-	
-	public DTextModel()
-	{
-		super();
-	    text = "Hello";
-		fontType = "Dialog.plain";
-	}
-	
+
 	public String getText()
 	{
 		return text;

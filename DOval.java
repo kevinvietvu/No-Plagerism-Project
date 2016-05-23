@@ -10,7 +10,7 @@ public class DOval extends DShape {
 	
 	public void draw(Graphics g)
 	{	
-		g.setColor(info.getC());
+		g.setColor(info.getColor());
         g.fillOval(info.getX(),info.getY(),info.getWidth(),info.getHeight());
 	}
 	
