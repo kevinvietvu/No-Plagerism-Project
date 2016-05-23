@@ -209,6 +209,10 @@ public class ControlPanel extends JPanel
 		{
 			public void actionPerformed(ActionEvent e) 
 			{
+				if (status.getText().equals("Client mode"))
+				{
+					return;
+				}
 				String result = JOptionPane.showInputDialog("File Name", null);
                 if (result != null) {
                     File f = new File(result);
@@ -241,6 +245,10 @@ public class ControlPanel extends JPanel
 		{
 			public void actionPerformed(ActionEvent e) 
 			{
+				if (status.getText().equals("Client mode"))
+				{
+					return;
+				}
 				String result = JOptionPane.showInputDialog("File Name", null);
                 if (result != null) 
                 {
@@ -265,6 +273,10 @@ public class ControlPanel extends JPanel
         {
             public void actionPerformed(ActionEvent e) 
             {
+            		if (status.getText().equals("Client mode"))
+            		{
+            			return;
+            		}
     				if(canvas.getSelected() != null)
     				{
     					DShape selected = canvas.getSelected();
