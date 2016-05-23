@@ -2,13 +2,13 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class DShapeModel {
-	public int x;
-	public int y;
-	public int width;
-	public int height;
-	public Color color;
-	public ArrayList<DShapeModel> listeners;
-	public int id;
+	private int x;
+	private int y;
+	private int width;
+	private int height;
+	private Color color;
+	private ArrayList<DShapeModel> listeners;
+	private int id;
 	
 	public DShapeModel() 
 	{

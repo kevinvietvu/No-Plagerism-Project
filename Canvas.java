@@ -222,10 +222,10 @@ public class Canvas extends JPanel  implements MouseMotionListener, MouseListene
 						// creates point objects for the knobs
 						defineKnobs();
 
-						if (!(controls.status.getText().equals("Client mode")))
+						if (!(controls.getStatus().getText().equals("Client mode")))
 						{
-							((DTextModel) selectedModel).setFontType(((Font) controls.fonts.getSelectedItem()).getName());
-							((DTextModel) selectedModel).setText(controls.textDisplay.getText());		
+							((DTextModel) selectedModel).setFontType(((Font) controls.getFonts().getSelectedItem()).getName());
+							((DTextModel) selectedModel).setText(controls.getTextDisplay().getText());		
 							String xmlModel = WhiteBoardServer.ObjectToXML(selectedModel);
 							WhiteBoardServer.send("change", xmlModel );
 						}
@@ -253,31 +253,31 @@ public class Canvas extends JPanel  implements MouseMotionListener, MouseListene
 			DRect rect = new DRect();
 			rect.info = (DRectModel) shapeModel;
 			shapesList.add(rect);
-			shapeModel.listeners.add(shapeModel);
+			shapeModel.getListeners().add(shapeModel);
 			tableModel.fireTableDataChanged();
 		}
-		if (shapeModel instanceof DOvalModel)
+		else if (shapeModel instanceof DOvalModel)
 		{
 			DOval oval = new DOval();
 			oval.info = (DOvalModel) shapeModel;
 			shapesList.add(oval);
-			shapeModel.listeners.add(shapeModel);
+			shapeModel.getListeners().add(shapeModel);
 			tableModel.fireTableDataChanged();
 		}
-		if (shapeModel instanceof DLineModel)
+		else if (shapeModel instanceof DLineModel)
 		{
 			DLine line = new DLine();
 			line.info = (DLineModel) shapeModel;
 			shapesList.add(line);
-			shapeModel.listeners.add(shapeModel);
+			shapeModel.getListeners().add(shapeModel);
 			tableModel.fireTableDataChanged();
 		}
-		if (shapeModel instanceof DTextModel)
+		else if (shapeModel instanceof DTextModel)
 		{
 			DText textLine = new DText();
 			textLine.info = (DTextModel) shapeModel;
 			shapesList.add(textLine);
-			shapeModel.listeners.add(shapeModel);
+			shapeModel.getListeners().add(shapeModel);
 			tableModel.fireTableDataChanged();
 		} 
 	}
@@ -322,8 +322,8 @@ public class Canvas extends JPanel  implements MouseMotionListener, MouseListene
 				draggingBl = false;
 				draggingUr = false;
 				draggingBr = false;
-				offsetX = x - selected.info.x;
-				offsetY = y - selected.info.y;
+				offsetX = x - selected.info.getX();
+				offsetY = y - selected.info.getY();
 
 			}
 			
@@ -380,7 +380,7 @@ public class Canvas extends JPanel  implements MouseMotionListener, MouseListene
 	public void mouseDragged(MouseEvent e) 
 	{
 		p = e.getPoint();
-		if(selected == null || controls.status.getText().equals("Client mode"))
+		if(selected == null || controls.getStatus().getText().equals("Client mode"))
 		{
 			return;
 		}

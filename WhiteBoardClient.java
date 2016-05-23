@@ -6,12 +6,12 @@ import java.net.Socket;
 import javax.swing.JOptionPane;
 
 class WhiteBoardClient extends Thread {
-	public String name;
-	public int port;
-	public final String DEFAULT_HOST_NAME = "127.0.0.1";
-	public static DShapeModel model;
-	public Canvas canvas;
-	public Thread client;
+	private String name;
+	private int port;
+	private final String DEFAULT_HOST_NAME = "127.0.0.1";
+	private static DShapeModel model;
+	private Canvas canvas;
+	private Thread client;
 
 	/**
 	 * Makes new client for a whiteboard
@@ -62,7 +62,7 @@ class WhiteBoardClient extends Thread {
 				}
 			}
 		} catch (Exception e) { // IOException and ClassNotFoundException
-			canvas.controls.status.setText("N/A");
+			canvas.controls.getStatus().setText("N/A");
 			JOptionPane.showMessageDialog(null, "Connection refused", "Error", JOptionPane.ERROR_MESSAGE);
 			
 		}

@@ -13,12 +13,12 @@ import javax.swing.JOptionPane;
 
 
 public class WhiteBoardServer extends Thread {
-	public static final int DEFAULT_PORT = 11584;
-	static ServerSocket serverSocket;
-	public int port;
-	public Canvas canvas;
+	private static final int DEFAULT_PORT = 11584;
+	private static ServerSocket serverSocket;
+	private int port;
+	private Canvas canvas;
 	private static ArrayList<ObjectOutputStream> clientStreams = new ArrayList<>();
-	public static Socket clientSocket = null;
+	private static Socket clientSocket = null;
 	
 
     /**
@@ -35,7 +35,7 @@ public class WhiteBoardServer extends Thread {
 			serverSocket = new ServerSocket(port);
 			System.out.println("Server was able to get on port: " + port);
 		} catch (IOException e) {
-			canvas.controls.status.setText("N/A");
+			canvas.controls.getStatus().setText("N/A");
 			JOptionPane.showMessageDialog(null, "Could not listen on port: " + port, "Error", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
@@ -50,7 +50,7 @@ public class WhiteBoardServer extends Thread {
 			serverSocket = new ServerSocket(port);
 			System.out.println("Server was able to get on port: " + port);
 		} catch (IOException e) {
-			canvas.controls.status.setText("N/A");
+			canvas.controls.getStatus().setText("N/A");
 			JOptionPane.showMessageDialog(null, "Could not listen on port: " + port, "Error", JOptionPane.ERROR_MESSAGE);
 			return;
 		}

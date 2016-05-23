@@ -6,7 +6,7 @@ import java.awt.geom.*;
 public class DLine extends DShape 
 {
 	private static final int HIT_BOX_SIZE = 3;
-	Line2D.Double line = new Line2D.Double();
+	private Line2D.Double line = new Line2D.Double();
 	
 	/**
 	 * calls the superclass constructor

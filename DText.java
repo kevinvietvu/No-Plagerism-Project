@@ -2,12 +2,8 @@ import java.awt.*;
 
 public class DText extends DShape 
 {
-    double fontSize = 1.0;
-    Font selectedFont;
-    FontMetrics metrics;
-    int fontHeight;
-    int fontAscent;
-    String textLine;
+    private Font selectedFont;
+    private int fontAscent;
     
     /**
      * calls the superclass constructor
@@ -59,6 +55,8 @@ public class DText extends DShape
 	    g.setColor(info.getColor());
 	    
 	    Shape clip = g.getClip();
+	    
+	    g.drawRect(info.getX() , info.getY(), info.getWidth(),info.getHeight());
 	    
 	    //Clips the width of the text within the box
 	    g.setClip(clip.getBounds().createIntersection(getBounds()));

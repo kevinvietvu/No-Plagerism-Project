@@ -14,28 +14,27 @@ import javax.swing.border.LineBorder;
 
 public class ControlPanel extends JPanel 
 {
-	public JTextField textDisplay;
-	public JComboBox<Font> fonts;
-	public GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-    public Font[] allFonts = ge.getAllFonts();
-    public JButton rect;
-    public JButton oval;
-    public JButton line;
-    public JButton text;
-	public JButton setColor;
-	public JButton moveFront;
-	public JButton moveBack;
-	public JButton remove;
-	public JButton server;
-	public JButton client;
-	public JButton open;
-	public JButton save;
-	public JButton saveImage;
-	public JLabel status;
-	public String xmlModel;
-	public String Command;
-	public int count = 1;
-	public Canvas canvas;
+	private JTextField textDisplay;
+	private JComboBox<Font> fonts;
+	private GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+	private Font[] allFonts = ge.getAllFonts();
+	private JButton rect;
+	private JButton oval;
+	private JButton line;
+	private JButton text;
+	private JButton setColor;
+	private JButton moveFront;
+	private JButton moveBack;
+	private JButton remove;
+	private JButton server;
+	private JButton client;
+	private JButton open;
+	private JButton save;
+	private JButton saveImage;
+	private JLabel status;
+	private String xmlModel;
+	private int count = 1;
+	private Canvas canvas;
 
 	public ControlPanel(Canvas canvas)
 	{
@@ -62,7 +61,7 @@ public class ControlPanel extends JPanel
 				bounds.setId(count);
 				count++;
 				canvas.addShape(bounds);
-				if (Whiteboard.server != null)
+				if (Whiteboard.getServer() != null)
 				{
 					xmlModel = WhiteBoardServer.ObjectToXML(bounds);
 					WhiteBoardServer.send("add",xmlModel);
@@ -80,7 +79,7 @@ public class ControlPanel extends JPanel
 				bounds.setId(count);
 				count++;
 				canvas.addShape(bounds);
-				if (Whiteboard.server != null)
+				if (Whiteboard.getServer() != null)
 				{
 					xmlModel = WhiteBoardServer.ObjectToXML(bounds);
 					WhiteBoardServer.send("add",xmlModel);
@@ -98,7 +97,7 @@ public class ControlPanel extends JPanel
 				bounds.setId(count);
 				count++;
 				canvas.addShape(bounds);
-				if (Whiteboard.server != null)
+				if (Whiteboard.getServer() != null)
 				{
 					xmlModel = WhiteBoardServer.ObjectToXML(bounds);
 					WhiteBoardServer.send("add",xmlModel);
@@ -117,7 +116,7 @@ public class ControlPanel extends JPanel
 				bounds.setId(count);
 				count++;
 				canvas.addShape(bounds);
-				if (Whiteboard.server != null)
+				if (Whiteboard.getServer() != null)
 				{
 					xmlModel = WhiteBoardServer.ObjectToXML(bounds);
 					WhiteBoardServer.send("add",xmlModel);
@@ -136,7 +135,7 @@ public class ControlPanel extends JPanel
 			{
 				return;
 			}
-			for (DShapeModel d : canvas.selectedModel.listeners)
+			for (DShapeModel d : canvas.selectedModel.getListeners())
 			{
 				if (canvas.selectedModel.equals(d))
 				{
@@ -196,7 +195,7 @@ public class ControlPanel extends JPanel
 					{
 						xmlModel = WhiteBoardServer.ObjectToXML(canvas.selectedModel);
 						WhiteBoardServer.send("remove",xmlModel);
-						canvas.selectedModel.listeners.remove(canvas.selectedModel);
+						canvas.selectedModel.getListeners().remove(canvas.selectedModel);
 						canvas.getShapesList().remove(canvas.selected);
 						canvas.getTableModel().fireTableDataChanged();
 						repaint();			
@@ -282,12 +281,12 @@ public class ControlPanel extends JPanel
 		{
 			public void actionPerformed(ActionEvent e) 
 			{
-				if (status.getText().equals("Client mode"))
+				if (getStatus().getText().equals("Client mode"))
 				{
 					JOptionPane.showMessageDialog(null, "Cannot change from client mode to server mode.", "Error", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
-				if (status.getText().equals("Server mode"))
+				if (getStatus().getText().equals("Server mode"))
 				{
 					JOptionPane.showMessageDialog(null, "Whiteboard already in Server Mode", "Error", JOptionPane.ERROR_MESSAGE);
 					return;
@@ -302,9 +301,9 @@ public class ControlPanel extends JPanel
 							throw new IllegalArgumentException();
 						}
 					          System.out.println("server: start");
-					          status.setText("Server mode");
+					          getStatus().setText("Server mode");
 					          WhiteBoardServer server = new WhiteBoardServer(port, canvas);
-					          Whiteboard.server = server;
+					          Whiteboard.setServer(server);
 					          server.start();
 					    }
 					catch(IllegalArgumentException e1) 
@@ -321,12 +320,12 @@ public class ControlPanel extends JPanel
 			public void actionPerformed(ActionEvent e) 
 			{
 		        
-				if (status.getText().equals("Server mode"))
+				if (getStatus().getText().equals("Server mode"))
 				{
 					JOptionPane.showMessageDialog(null, "Can't change from server mode to client mode. Restart the program.", "Error", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
-				if (status.getText().equals("Client mode"))
+				if (getStatus().getText().equals("Client mode"))
 				{
 					JOptionPane.showMessageDialog(null, "Whiteboard already in client mode." , "Error", JOptionPane.ERROR_MESSAGE);
 					return;
@@ -342,7 +341,7 @@ public class ControlPanel extends JPanel
 						{
 							throw new IllegalArgumentException();
 						}
-						status.setText("Client mode");
+						getStatus().setText("Client mode");
 						canvas.clear();
 						disableAllButtons();
 						WhiteBoardClient client = new WhiteBoardClient(canvas,parts[0].trim(), port);
@@ -357,7 +356,7 @@ public class ControlPanel extends JPanel
 			}
 		});
 		
-		status = new JLabel("N/A");
+		setStatus(new JLabel("N/A"));
 		
 		shapePanel.setLayout(new BoxLayout(shapePanel, BoxLayout.X_AXIS)); 
 		shapePanel.add(new JLabel("Add"));
@@ -374,10 +373,10 @@ public class ControlPanel extends JPanel
 		colorPanel.add(open);
 		colorPanel.add(Box.createRigidArea(new Dimension(0,50)));
 		
-		textDisplay = new JTextField(10);
-		fonts = new JComboBox<Font>(allFonts);
+		setTextDisplay(new JTextField(10));
+		setFonts(new JComboBox<Font>(allFonts));
 		//this gets the actual font name into the box
-		fonts.setRenderer(new DefaultListCellRenderer() 
+		getFonts().setRenderer(new DefaultListCellRenderer() 
 		{
 		   @Override
 		   public Component getListCellRendererComponent(JList<?> list,
@@ -393,12 +392,12 @@ public class ControlPanel extends JPanel
 		   }
 		});
 		
-		textDisplay.setMaximumSize(new Dimension(100, textDisplay.getPreferredSize().height));
+		getTextDisplay().setMaximumSize(new Dimension(100, getTextDisplay().getPreferredSize().height));
 		disableButtons();
 		fontBox.setLayout(new BoxLayout(fontBox, BoxLayout.X_AXIS));
-		fontBox.add(textDisplay);
+		fontBox.add(getTextDisplay());
 		fontBox.add(Box.createRigidArea(new Dimension(20,0)));
-		fontBox.add(fonts);
+		fontBox.add(getFonts());
 		colorPanel.add(Box.createRigidArea(new Dimension(0,50)));
 		
 		movePanel.setLayout(new BoxLayout(movePanel, BoxLayout.X_AXIS));
@@ -411,7 +410,7 @@ public class ControlPanel extends JPanel
 		networkPanel.add(server);
 		networkPanel.add(client);
 		networkPanel.add(Box.createRigidArea(new Dimension(20,0)));
-		networkPanel.add(status);
+		networkPanel.add(getStatus());
 		networkPanel.add(Box.createRigidArea(new Dimension(0,50)));
 		
 		tablePanel.setLayout(new BorderLayout());
@@ -444,19 +443,43 @@ public class ControlPanel extends JPanel
 		moveFront.setEnabled(false);
 		moveBack.setEnabled(false);
 	    remove.setEnabled(false);
-		textDisplay.setEnabled(false);
-		fonts.setEnabled(false);
+		getTextDisplay().setEnabled(false);
+		getFonts().setEnabled(false);
 	}
 	
 	public void enableButtons()
 	{
-		textDisplay.setEnabled(true);
-		fonts.setEnabled(true);
+		getTextDisplay().setEnabled(true);
+		getFonts().setEnabled(true);
 	}
 	
 	public void disableButtons()
 	{
-		textDisplay.setEnabled(false);
-		fonts.setEnabled(false);
+		getTextDisplay().setEnabled(false);
+		getFonts().setEnabled(false);
+	}
+
+	public JLabel getStatus() {
+		return status;
+	}
+
+	public void setStatus(JLabel status) {
+		this.status = status;
+	}
+
+	public JTextField getTextDisplay() {
+		return textDisplay;
+	}
+
+	public void setTextDisplay(JTextField textDisplay) {
+		this.textDisplay = textDisplay;
+	}
+
+	public JComboBox<Font> getFonts() {
+		return fonts;
+	}
+
+	public void setFonts(JComboBox<Font> fonts) {
+		this.fonts = fonts;
 	}
 }

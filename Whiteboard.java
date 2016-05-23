@@ -7,9 +7,9 @@ import java.util.Vector;
 import javax.swing.*;
 
 public class Whiteboard extends JFrame {
-	public String title;
-	public static WhiteBoardServer server;
-	public Canvas canvasBoard;
+	private String title;
+	private static WhiteBoardServer server;
+	private Canvas canvasBoard;
 	
 	/**
 	 * Makes a new whiteboard
@@ -45,6 +45,14 @@ public class Whiteboard extends JFrame {
 
 
 
+	}
+
+	public static WhiteBoardServer getServer() {
+		return server;
+	}
+
+	public static void setServer(WhiteBoardServer server) {
+		Whiteboard.server = server;
 	}
 
 	
